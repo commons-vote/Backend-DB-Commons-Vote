@@ -99,6 +99,30 @@ sub fetch_images {
 	} $self->{'schema'}->resultset('Image')->search;
 }
 
+sub fetch_section {
+	my ($self, $section_id) = @_;
+
+	my $section = $self->{'schema'}->resultset('Section')->search({
+		'section_id' => $section_id,
+	})->single;
+
+	if (! defined $section) {
+		return;
+	}
+
+	return $self->_construct_section($section);
+}
+
+sub fetch_section_categories {
+	my ($self, $section_id) = @_;
+
+	my @ret = $self->{'schema'}->resultset('SectionCategory')->search({
+		'section_id' => $section_id,
+	});
+
+	return map { $_->category } @ret;
+}
+
 sub fetch_section_images {
 	my ($self, $section_id) = @_;
 
