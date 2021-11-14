@@ -57,11 +57,11 @@ sub fetch_competition {
 }
 
 sub fetch_competitions {
-	my $self = shift;
+	my ($self, $opts_hr) = @_;
 
 	return map {
 		$self->_construct_competition($_);
-	} $self->{'schema'}->resultset('Competition')->search;
+	} $self->{'schema'}->resultset('Competition')->search($opts_hr);
 }
 
 sub fetch_competition_sections {
@@ -92,11 +92,11 @@ sub fetch_image {
 }
 
 sub fetch_images {
-	my $self = shift;
+	my ($self, $opts_hr) = @_;
 
 	return map {
 		$self->_construct_image($_);
-	} $self->{'schema'}->resultset('Image')->search;
+	} $self->{'schema'}->resultset('Image')->search($opts_hr);
 }
 
 sub fetch_section {
@@ -150,11 +150,11 @@ sub fetch_user {
 }
 
 sub fetch_users {
-	my $self = shift;
+	my ($self, $opts_hr) = @_;
 
 	return map {
 		$self->_construct_user($_);
-	} $self->{'schema'}->resultset('User')->search;
+	} $self->{'schema'}->resultset('User')->search($opts_hr);
 }
 
 sub _construct_competition {
