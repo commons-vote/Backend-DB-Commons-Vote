@@ -179,9 +179,11 @@ sub _construct_image {
 	my ($self, $image) = @_;
 
 	return Data::Commons::Vote::Image->new(
+		'height' => $image->height,
 		'id' => $image->image_id,
 		'image' => $self->_decode_utf8($image->image),
 		'uploader' => $self->_construct_user($image->uploader),
+		'width' => $image->width,
 	);
 }
 
