@@ -10,6 +10,7 @@ use Data::Commons::Vote::Section;
 use Data::Commons::Vote::User;
 use DateTime;
 use DateTime::Format::Strptime;
+use Encode qw(is_utf8);
 use Error::Pure qw(err);
 use Unicode::UTF8 qw(decode_utf8);
 
@@ -240,7 +241,11 @@ sub _decode_utf8 {
 	my ($self, $value) = @_;
 
 	if (defined $value) {
-		return decode_utf8($value);
+		if (is_utf8($value)) {
+			err "Value '$value' is decoded.";
+		} else {
+			return decode_utf8($value);
+		}
 	} else {
 		return $value;
 	}
