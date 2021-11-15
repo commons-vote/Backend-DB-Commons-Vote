@@ -166,11 +166,11 @@ sub _construct_competition {
 		'dt_from' => $self->_convert_db_date_to_dt($comp->date_from),
 		'dt_to' => $self->_convert_db_date_to_dt($comp->date_to),
 		'id' => $comp->competition_id,
-		'logo' => decode_utf8($comp->logo),
-		'name' => decode_utf8($comp->name),
+		'logo' => $self->_decode_utf8($comp->logo),
+		'name' => $self->_decode_utf8($comp->name),
 		'number_of_votes' => $comp->number_of_votes,
-		'organizer' => decode_utf8($comp->organizer),
-		'organizer_logo' => decode_utf8($comp->organizer_logo),
+		'organizer' => $self->_decode_utf8($comp->organizer),
+		'organizer_logo' => $self->_decode_utf8($comp->organizer_logo),
 		'sections' => $sections_ar,
 	);
 }
