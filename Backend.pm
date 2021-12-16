@@ -16,11 +16,13 @@ sub new {
 	# Create object.
 	my $self = bless {}, $class;
 
+	# Database schema instance.
 	$self->{'schema'} = undef;
 
 	# Process parameters.
 	set_params($self, @params);
 
+	# Check schema.
 	if (! defined $self->{'schema'}) {
 		err "Parameter 'schema' is required.";
 	}
@@ -28,6 +30,7 @@ sub new {
 		err "Parameter 'schema' must be 'Schema::Commons::Vote' instance.";
 	}
 
+	# Transform object.
 	$self->{'_transform'} = Commons::Vote::Backend::Transform->new;
 
 	return $self;
