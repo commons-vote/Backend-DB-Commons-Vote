@@ -4,13 +4,7 @@ use strict;
 use warnings;
 
 use Class::Utils qw(set_params);
-use Data::Commons::Vote::Competition;
-use Data::Commons::Vote::Image;
-use Data::Commons::Vote::Section;
-use Data::Commons::Vote::User;
-use DateTime;
-use DateTime::Format::Strptime;
-use Encode qw(is_utf8);
+use Commons::Vote::Backend::Transform;
 use Error::Pure qw(err);
 use Unicode::UTF8 qw(decode_utf8);
 
@@ -34,10 +28,7 @@ sub new {
 		err "Parameter 'schema' must be 'Schema::Commons::Vote' instance.";
 	}
 
-	$self->{'_dt_parser'} = DateTime::Format::Strptime->new(
-		'pattern' => '%FT%T',
-		'time_zone' => 'UTC',
-	);
+	$self->{'_transform'} = Commons::Vote::Backend::Transform->new;
 
 	return $self;
 }
@@ -53,7 +44,7 @@ sub fetch_competition {
 		return;
 	}
 
-	return $self->_construct_competition($comp,
+	return $self->{'_transform'}->competition_db2obj($comp,
 		[$self->fetch_competition_sections($competition_id)]);
 }
 
@@ -61,7 +52,7 @@ sub fetch_competitions {
 	my ($self, $opts_hr) = @_;
 
 	return map {
-		$self->_construct_competition($_);
+		$self->{'_transform'}->competition_db2obj($_);
 	} $self->{'schema'}->resultset('Competition')->search($opts_hr);
 }
 
@@ -73,7 +64,7 @@ sub fetch_competition_sections {
 	});
 
 	return map {
-		$self->_construct_section($_,
+		$self->{'_transform'}->section_db2obj($_,
 			[$self->fetch_section_images($_->section_id)]);
 	} @ret;
 }
@@ -89,14 +80,14 @@ sub fetch_image {
 		return;
 	}
 
-	return $self->_construct_image($image);
+	return $self->{'_transform'}->image_db2obj($image);
 }
 
 sub fetch_images {
 	my ($self, $opts_hr) = @_;
 
 	return map {
-		$self->_construct_image($_);
+		$self->{'_transform'}->image_db2obj($_);
 	} $self->{'schema'}->resultset('Image')->search($opts_hr);
 }
 
@@ -148,108 +139,70 @@ sub fetch_user {
 		return;
 	}
 
-	return $self->_construct_user($user);
+	return $self->{'_transform'}->user_db2obj($user);
 }
 
 sub fetch_users {
 	my ($self, $opts_hr) = @_;
 
 	return map {
-		$self->_construct_user($_);
+		$self->{'_transform'}->user_db2obj($_);
 	} $self->{'schema'}->resultset('User')->search($opts_hr);
 }
 
-sub _construct_competition {
-	my ($self, $comp, $sections_ar) = @_;
+sub save_competition {
+	my ($self, $competition_hr) = @_;
 
-	$sections_ar ||= [];
+	my $comp = $self->{'schema'}->resultset('Competition')
+		->create($competition_hr);
 
-	return Data::Commons::Vote::Competition->new(
-		'dt_from' => $self->_convert_db_date_to_dt($comp->date_from),
-		'dt_to' => $self->_convert_db_date_to_dt($comp->date_to),
-		'id' => $comp->competition_id,
-		'logo' => $self->_decode_utf8($comp->logo),
-		'name' => $self->_decode_utf8($comp->name),
-		'number_of_votes' => $comp->number_of_votes,
-		'organizer' => $self->_decode_utf8($comp->organizer),
-		'organizer_logo' => $self->_decode_utf8($comp->organizer_logo),
-		'sections' => $sections_ar,
-	);
+	return defined $comp ? $self->{'_transform'}->competition_db2obj($comp) : undef;
 }
 
-sub _construct_image {
-	my ($self, $image) = @_;
+sub save_image {
+	my ($self, $image_hr) = @_;
 
-	return Data::Commons::Vote::Image->new(
-		'height' => $image->height,
-		'id' => $image->image_id,
-		'image' => $self->_decode_utf8($image->image),
-		'uploader' => $self->_construct_user($image->uploader),
-		'width' => $image->width,
-	);
+	my $image = $self->{'schema'}->resultset('Image')
+		->create($image_hr);
+
+	return defined $image ? $self->{'_transform'}->image_db2obj($image) : undef;
 }
 
-sub _construct_section {
-	my ($self, $section, $images_ar) = @_;
+sub save_section {
+	my ($self, $section_hr) = @_;
 
-	$images_ar ||= [];
+	my $section = $self->{'schema'}->resultset('Section')
+		->create($section_hr);
 
-	return Data::Commons::Vote::Section->new(
-		'id' => $section->section_id,
-		'images' => $images_ar,
-		'logo' => $self->_decode_utf8($section->logo),
-		'name' => $self->_decode_utf8($section->name),
-		'number_of_votes' => $section->number_of_votes,
-	);
+	return defined $section ? $self->{'_transform'}->section_db2obj($section) : undef;
 }
 
-sub _construct_user {
-	my ($self, $user) = @_;
+sub save_section_category {
+	my ($self, $section_category_hr) = @_;
 
-	return Data::Commons::Vote::User->new(
-		'first_upload_at' => $self->_convert_db_datetime_to_dt($user->first_upload_at),
-		'id' => $user->user_id,
-		'name' => $self->_decode_utf8($user->name),
-		'wm_username' => $self->_decode_utf8($user->wm_username),
-	);
+	my $section_category = $self->{'schema'}->resultset('SectionCategory')
+		->create($section_category_hr);
+
+	# TODO Co mam vracet?
+	return defined $section_category ? $section_category : undef;
 }
 
-sub _convert_db_date_to_dt {
-	my ($self, $db_date) = @_;
+sub save_section_image {
+	my ($self, $section_image_hr) = @_;
 
-	my ($year, $month, $day) = split m/-/ms, $db_date;
+	my $section_image = $self->{'schema'}->resultset('SectionImage')
+		->create($section_image_hr);
 
-	my $dt = DateTime->new(
-		'year' => $year,
-		'month' => $month,
-		'day' => $day,
-	);
-
-	return $dt;
+	# TODO Co vracet?
+	return defined $section_image ? $section_image : undef
 }
 
-sub _convert_db_datetime_to_dt {
-	my ($self, $db_datetime) = @_;
+sub save_user {
+	my ($self, $user_hr) = @_;
 
-	if (! defined $db_datetime) {
-		return $db_datetime;
-	}
+	my $user = $self->{'schema'}->resultset('User')->create($user_hr);
 
-	return $self->{'_dt_parser'}->parse_datetime($db_datetime),
-}
-
-sub _decode_utf8 {
-	my ($self, $value) = @_;
-
-	if (defined $value) {
-		if (is_utf8($value)) {
-			err "Value '$value' is decoded.";
-		} else {
-			return decode_utf8($value);
-		}
-	} else {
-		return $value;
-	}
+	return defined $user ? $self->{'_transform'}->user_db2obj($user) : undef;
 }
 
 1;
