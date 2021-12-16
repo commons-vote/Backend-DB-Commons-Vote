@@ -111,7 +111,8 @@ sub fetch_section {
 		return;
 	}
 
-	return $self->_construct_section($section);
+	return $self->{'_transform'}->section_db2obj($section,
+		[$self->fetch_section_images($section_id)]);
 }
 
 sub fetch_section_categories {
