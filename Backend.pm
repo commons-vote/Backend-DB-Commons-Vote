@@ -5,6 +5,7 @@ use warnings;
 
 use Class::Utils qw(set_params);
 use Commons::Vote::Backend::Transform;
+use English;
 use Error::Pure qw(err);
 use Unicode::UTF8 qw(decode_utf8);
 
@@ -205,6 +206,29 @@ sub save_competition {
 		->create($competition_hr);
 
 	return defined $comp ? $self->{'_transform'}->competition_db2obj($comp) : undef;
+}
+
+sub save_hash_type {
+	my ($self, $hash_type) = @_;
+
+	if (! $hash_type->isa('Data::Commons::Vote::HashType')) {
+		err "Hash type object must be a 'Data::Commons::Vote::HashType' instance.";
+	}
+
+	my $hash_type_db = eval {
+		$self->{'schema'}->resultset('HashType')->create({
+			'active' => $hash_type->active,
+			'name' => $hash_type->name,
+		});
+	};
+	if ($EVAL_ERROR) {
+		err "Cannot save hash type.",
+			'Error', $EVAL_ERROR;
+	}
+
+	return defined $hash_type_db
+		? $self->{'_transform'}->hash_type_db2obj($hash_type_db)
+		: undef;
 }
 
 sub save_image {
