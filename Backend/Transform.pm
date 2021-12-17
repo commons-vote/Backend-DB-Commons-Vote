@@ -5,9 +5,11 @@ use warnings;
 
 use Class::Utils qw(set_params);
 use Data::Commons::Vote::Competition;
+use Data::Commons::Vote::HashType;
 use Data::Commons::Vote::Image;
 use Data::Commons::Vote::Section;
 use Data::Commons::Vote::User;
+use Data::Commons::Vote::UserLogin;
 use DateTime;
 use DateTime::Format::Strptime;
 use Encode qw(is_utf8);
@@ -51,6 +53,16 @@ sub competition_db2obj {
 	);
 }
 
+sub hash_type_db2obj {
+	my ($self, $hash_type_db) = @_;
+
+	return Data::Commons::Vote::HashType->new(
+		'active' => $hash_type_db->active,
+		'id' => $hash_type_db->hash_type_id,
+		'name' => $hash_type_db->name,
+	);
+}
+
 sub image_db2obj {
 	my ($self, $image) = @_;
 
@@ -85,6 +97,17 @@ sub user_db2obj {
 		'id' => $user->user_id,
 		'name' => $self->_decode_utf8($user->name),
 		'wm_username' => $self->_decode_utf8($user->wm_username),
+	);
+}
+
+sub user_login_db2obj {
+	my ($self, $user_login_db, $user, $hash_type) = @_;
+
+	return Data::Commons::Vote::UserLogin->new(
+		'user_id' => $user,
+		'login' => $user_login_db->login,
+		'password' => $user_login_db->password,
+		'hash_type' => $hash_type,
 	);
 }
 
