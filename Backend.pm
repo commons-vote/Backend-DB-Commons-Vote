@@ -72,6 +72,34 @@ sub fetch_competition_sections {
 	} @ret;
 }
 
+sub fetch_hash_type {
+	my ($self, $hash_type_id) = @_;
+
+	my $hash_type = $self->{'schema'}->resultset('HashType')->search({
+		'hash_type_id' => $hash_type_id,
+	})->single;
+
+	if (! defined $hash_type) {
+		return;
+	}
+
+	return $self->{'_transform'}->hash_type_db2obj($hash_type);
+}
+
+sub fetch_hash_type_name {
+	my ($self, $hash_type_name) = @_;
+
+	my $hash_type = $self->{'schema'}->resultset('HashType')->search({
+		'name' => $hash_type_name,
+	})->single;
+
+	if (! defined $hash_type) {
+		return;
+	}
+
+	return $self->{'_transform'}->hash_type_db2obj($hash_type);
+}
+
 sub fetch_image {
 	my ($self, $image_id) = @_;
 
@@ -143,6 +171,23 @@ sub fetch_user {
 	}
 
 	return $self->{'_transform'}->user_db2obj($user);
+}
+
+sub fetch_user_login {
+	my ($self, $login) = @_;
+
+	my $user_login = $self->{'schema'}->resultset('UserLogin')->search({
+		'login' => $login,
+	})->single;
+
+	if (! defined $user_login) {
+		return;
+	}
+
+	return $self->{'_transform'}->user_login_db2obj($user_login,
+		$self->{'_transform'}->user($user_login->user_id),
+		$self->{'_transform'}->hash_type($user_login->hash_type_id),
+	);
 }
 
 sub fetch_users {
