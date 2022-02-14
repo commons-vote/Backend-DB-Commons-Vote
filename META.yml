@@ -1,5 +1,5 @@
 ---
-abstract: 'DB backend for https://commons.vote/ application.'
+abstract: 'commons.vote DB backend.'
 author:
   - 'Michal Josef Spacek <skim@cpan.org>'
 build_requires:
