@@ -53,11 +53,11 @@ sub fetch_competition {
 }
 
 sub fetch_competitions {
-	my ($self, $opts_hr) = @_;
+	my ($self, $cond_hr) = @_;
 
 	return map {
 		$self->{'_transform'}->competition_db2obj($_);
-	} $self->{'schema'}->resultset('Competition')->search($opts_hr);
+	} $self->{'schema'}->resultset('Competition')->search($cond_hr);
 }
 
 sub fetch_competition_sections {
@@ -116,11 +116,11 @@ sub fetch_image {
 }
 
 sub fetch_images {
-	my ($self, $opts_hr) = @_;
+	my ($self, $cond_hr) = @_;
 
 	return map {
 		$self->{'_transform'}->image_db2obj($_);
-	} $self->{'schema'}->resultset('Image')->search($opts_hr);
+	} $self->{'schema'}->resultset('Image')->search($cond_hr);
 }
 
 sub fetch_section {
@@ -192,11 +192,11 @@ sub fetch_user_login {
 }
 
 sub fetch_users {
-	my ($self, $opts_hr) = @_;
+	my ($self, $cond_hr) = @_;
 
 	return map {
 		$self->{'_transform'}->user_db2obj($_);
-	} $self->{'schema'}->resultset('User')->search($opts_hr);
+	} $self->{'schema'}->resultset('User')->search($cond_hr);
 }
 
 sub save_competition {
