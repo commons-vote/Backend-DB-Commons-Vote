@@ -41,8 +41,8 @@ sub competition_db2obj {
 	$sections_ar ||= [];
 
 	return Data::Commons::Vote::Competition->new(
-		'dt_from' => $self->_convert_db_date_to_dt($comp->date_from),
-		'dt_to' => $self->_convert_db_date_to_dt($comp->date_to),
+		'dt_from' => $comp->date_from,
+		'dt_to' => $comp->date_to,
 		'id' => $comp->competition_id,
 		'logo' => $self->_decode_utf8($comp->logo),
 		'name' => $self->_decode_utf8($comp->name),
@@ -109,20 +109,6 @@ sub person_login_db2obj {
 		'password' => $person_login_db->password,
 		'hash_type' => $hash_type,
 	);
-}
-
-sub _convert_db_date_to_dt {
-	my ($self, $db_date) = @_;
-
-	my ($year, $month, $day) = split m/-/ms, $db_date;
-
-	my $dt = DateTime->new(
-		'year' => $year,
-		'month' => $month,
-		'day' => $day,
-	);
-
-	return $dt;
 }
 
 sub _convert_db_datetime_to_dt {
