@@ -1,7 +1,8 @@
 TODO
 ====
 1. save_* methods rewrite to accept data objects instead of structures.
-2.
+2. db_datetime in one format? Or detect all formats?
+3.
 
 Applied
 =======
