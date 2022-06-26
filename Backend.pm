@@ -160,43 +160,43 @@ sub fetch_section_images {
 	} @ret;
 }
 
-sub fetch_user {
-	my ($self, $user_id) = @_;
+sub fetch_person {
+	my ($self, $person_id) = @_;
 
-	my $user = $self->{'schema'}->resultset('User')->search({
-		'user_id' => $user_id,
+	my $person = $self->{'schema'}->resultset('Person')->search({
+		'person_id' => $person_id,
 	})->single;
 
-	if (! defined $user) {
+	if (! defined $person) {
 		return;
 	}
 
-	return $self->{'_transform'}->user_db2obj($user);
+	return $self->{'_transform'}->person_db2obj($person);
 }
 
-sub fetch_user_login {
+sub fetch_person_login {
 	my ($self, $login) = @_;
 
-	my $user_login = $self->{'schema'}->resultset('UserLogin')->search({
+	my $person_login = $self->{'schema'}->resultset('PersonLogin')->search({
 		'login' => $login,
 	})->single;
 
-	if (! defined $user_login) {
+	if (! defined $person_login) {
 		return;
 	}
 
-	return $self->{'_transform'}->user_login_db2obj($user_login,
-		$self->{'_transform'}->user($user_login->user_id),
-		$self->{'_transform'}->hash_type($user_login->hash_type_id),
+	return $self->{'_transform'}->person_login_db2obj($person_login,
+		$self->{'_transform'}->person($person_login->person_id),
+		$self->{'_transform'}->hash_type($person_login->hash_type_id),
 	);
 }
 
-sub fetch_users {
+sub fetch_people {
 	my ($self, $cond_hr, $attr_hr) = @_;
 
 	return map {
-		$self->{'_transform'}->user_db2obj($_);
-	} $self->{'schema'}->resultset('User')->search($cond_hr, $attr_hr);
+		$self->{'_transform'}->person_db2obj($_);
+	} $self->{'schema'}->resultset('Person')->search($cond_hr, $attr_hr);
 }
 
 sub save_competition {
@@ -269,12 +269,12 @@ sub save_section_image {
 	return defined $section_image ? $section_image : undef
 }
 
-sub save_user {
-	my ($self, $user_hr) = @_;
+sub save_person {
+	my ($self, $person_hr) = @_;
 
-	my $user = $self->{'schema'}->resultset('User')->create($user_hr);
+	my $person = $self->{'schema'}->resultset('Person')->create($person_hr);
 
-	return defined $user ? $self->{'_transform'}->user_db2obj($user) : undef;
+	return defined $person ? $self->{'_transform'}->person_db2obj($person) : undef;
 }
 
 1;

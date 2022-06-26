@@ -8,8 +8,8 @@ use Data::Commons::Vote::Competition;
 use Data::Commons::Vote::HashType;
 use Data::Commons::Vote::Image;
 use Data::Commons::Vote::Section;
-use Data::Commons::Vote::User;
-use Data::Commons::Vote::UserLogin;
+use Data::Commons::Vote::Person;
+use Data::Commons::Vote::PersonLogin;
 use DateTime;
 use DateTime::Format::Strptime;
 use Encode qw(is_utf8);
@@ -70,7 +70,7 @@ sub image_db2obj {
 		'height' => $image->height,
 		'id' => $image->image_id,
 		'image' => $self->_decode_utf8($image->image),
-		'uploader' => $self->user_db2obj($image->uploader),
+		'uploader' => $self->person_db2obj($image->uploader),
 		'width' => $image->width,
 	);
 }
@@ -89,24 +89,24 @@ sub section_db2obj {
 	);
 }
 
-sub user_db2obj {
-	my ($self, $user) = @_;
+sub person_db2obj {
+	my ($self, $person) = @_;
 
-	return Data::Commons::Vote::User->new(
-		'first_upload_at' => $self->_convert_db_datetime_to_dt($user->first_upload_at),
-		'id' => $user->user_id,
-		'name' => $self->_decode_utf8($user->name),
-		'wm_username' => $self->_decode_utf8($user->wm_username),
+	return Data::Commons::Vote::Person->new(
+		'first_upload_at' => $self->_convert_db_datetime_to_dt($person->first_upload_at),
+		'id' => $person->person_id,
+		'name' => $self->_decode_utf8($person->name),
+		'wm_username' => $self->_decode_utf8($person->wm_username),
 	);
 }
 
-sub user_login_db2obj {
-	my ($self, $user_login_db, $user, $hash_type) = @_;
+sub person_login_db2obj {
+	my ($self, $person_login_db, $person, $hash_type) = @_;
 
-	return Data::Commons::Vote::UserLogin->new(
-		'user_id' => $user,
-		'login' => $user_login_db->login,
-		'password' => $user_login_db->password,
+	return Data::Commons::Vote::PersonLogin->new(
+		'person_id' => $person,
+		'login' => $person_login_db->login,
+		'password' => $person_login_db->password,
 		'hash_type' => $hash_type,
 	);
 }
