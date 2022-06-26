@@ -141,7 +141,9 @@ sub _decode_utf8 {
 
 	if (defined $value) {
 		if (is_utf8($value)) {
-			err "Value '$value' is decoded.";
+# XXX Pg is converting this automatically.
+			return $value;
+#			err "Value '$value' is decoded.";
 		} else {
 			return decode_utf8($value);
 		}
