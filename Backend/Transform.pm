@@ -10,8 +10,6 @@ use Data::Commons::Vote::Image;
 use Data::Commons::Vote::Section;
 use Data::Commons::Vote::Person;
 use Data::Commons::Vote::PersonLogin;
-use DateTime;
-use DateTime::Format::Strptime;
 use Encode qw(is_utf8);
 use Error::Pure qw(err);
 use Unicode::UTF8 qw(decode_utf8);
@@ -26,11 +24,6 @@ sub new {
 
 	# Process parameters.
 	set_params($self, @params);
-
-	$self->{'_dt_parser'} = DateTime::Format::Strptime->new(
-		'pattern' => '%FT%T',
-		'time_zone' => 'UTC',
-	);
 
 	return $self;
 }
@@ -93,7 +86,7 @@ sub person_db2obj {
 	my ($self, $person) = @_;
 
 	return Data::Commons::Vote::Person->new(
-		'first_upload_at' => $self->_convert_db_datetime_to_dt($person->first_upload_at),
+		'first_upload_at' => $person->first_upload_at,
 		'id' => $person->person_id,
 		'name' => $self->_decode_utf8($person->name),
 		'wm_username' => $self->_decode_utf8($person->wm_username),
@@ -110,20 +103,6 @@ sub person_login_db2obj {
 		'hash_type' => $hash_type,
 	);
 }
-
-sub _convert_db_datetime_to_dt {
-	my ($self, $db_datetime) = @_;
-
-	if (! defined $db_datetime) {
-		return $db_datetime;
-	}
-
-	# TODO $db_datetime isn't same.
-
-	my $dt = $self->{'_dt_parser'}->parse_datetime($db_datetime);
-	return $dt;
-}
-
 
 sub _decode_utf8 {
 	my ($self, $value) = @_;
