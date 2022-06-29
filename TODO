@@ -2,7 +2,8 @@ TODO
 ====
 1. save_* methods rewrite to accept data objects instead of structures.
 2. db_datetime in one format? Or detect all formats?
-3.
+3. How to test without real DBD::SQLite?
+4.
 
 Applied
 =======

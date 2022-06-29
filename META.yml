@@ -3,10 +3,14 @@ abstract: 'commons.vote DB backend.'
 author:
   - 'Michal Josef Spacek <skim@cpan.org>'
 build_requires:
+  DBD::SQLite: 0
   English: 0
   Error::Pure::Utils: 0.22
   ExtUtils::MakeMaker: 6.36
   File::Object: 0.03
+  File::Spec::Functions: 0
+  File::Temp: 0
+  Schema::Commons::Vote: 0
   Test::More: 0
   Test::NoWarnings: 0
 configure_requires:
