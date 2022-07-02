@@ -63,6 +63,10 @@ sub fetch_competitions {
 sub fetch_competition_sections {
 	my ($self, $competition_id) = @_;
 
+	if (! $competition_id) {
+		return ();
+	}
+
 	my @ret = $self->{'schema'}->resultset('Section')->search({
 		'competition_id' => $competition_id,
 	});
