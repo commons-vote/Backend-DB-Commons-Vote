@@ -99,15 +99,12 @@ sub fetch_hash_type_name {
 sub fetch_image {
 	my ($self, $image_id) = @_;
 
-	my $image = $self->{'schema'}->resultset('Image')->search({
+	my $image_db = $self->{'schema'}->resultset('Image')->search({
 		'image_id' => $image_id,
 	})->single;
 
-	if (! defined $image) {
-		return;
-	}
-
-	return $self->{'_transform'}->image_db2obj($image);
+	return unless defined $image_db;
+	return $self->{'_transform'}->image_db2obj($image_db);
 }
 
 sub fetch_images {
