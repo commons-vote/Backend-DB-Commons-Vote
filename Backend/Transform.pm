@@ -94,13 +94,13 @@ sub person_db2obj {
 }
 
 sub person_login_db2obj {
-	my ($self, $person_login_db, $person, $hash_type) = @_;
+	my ($self, $person_login_db) = @_;
 
 	return Data::Commons::Vote::PersonLogin->new(
-		'person_id' => $person,
+		'person_id' => $self->person_db2obj($person_login_db->person_id),
 		'login' => $person_login_db->login,
 		'password' => $person_login_db->password,
-		'hash_type' => $hash_type,
+		'hash_type' => $self->hash_type_db2obj($person_login_db->hash_type_id),
 	);
 }
 
