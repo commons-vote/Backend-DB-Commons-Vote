@@ -173,14 +173,8 @@ sub fetch_person_login {
 		'login' => $login,
 	})->single;
 
-	if (! defined $person_login) {
-		return;
-	}
-
-	return $self->{'_transform'}->person_login_db2obj($person_login,
-		$self->{'_transform'}->person($person_login->person_id),
-		$self->{'_transform'}->hash_type($person_login->hash_type_id),
-	);
+	return unless defined $person_login;
+	return $self->{'_transform'}->person_login_db2obj($person_login);
 }
 
 sub fetch_people {
