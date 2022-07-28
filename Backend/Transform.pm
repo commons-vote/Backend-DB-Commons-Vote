@@ -29,19 +29,19 @@ sub new {
 }
 
 sub competition_db2obj {
-	my ($self, $comp, $sections_ar) = @_;
+	my ($self, $comp_db, $sections_ar) = @_;
 
 	$sections_ar ||= [];
 
 	return Data::Commons::Vote::Competition->new(
-		'dt_from' => $comp->date_from,
-		'dt_to' => $comp->date_to,
-		'id' => $comp->competition_id,
-		'logo' => $self->_decode_utf8($comp->logo),
-		'name' => $self->_decode_utf8($comp->name),
-		'number_of_votes' => $comp->number_of_votes,
-		'organizer' => $self->_decode_utf8($comp->organizer),
-		'organizer_logo' => $self->_decode_utf8($comp->organizer_logo),
+		'dt_from' => $comp_db->date_from,
+		'dt_to' => $comp_db->date_to,
+		'id' => $comp_db->competition_id,
+		'logo' => $self->_decode_utf8($comp_db->logo),
+		'name' => $self->_decode_utf8($comp_db->name),
+		'number_of_votes' => $comp_db->number_of_votes,
+		'organizer' => $self->_decode_utf8($comp_db->organizer),
+		'organizer_logo' => $self->_decode_utf8($comp_db->organizer_logo),
 		'sections' => $sections_ar,
 	);
 }
@@ -57,39 +57,39 @@ sub hash_type_db2obj {
 }
 
 sub image_db2obj {
-	my ($self, $image) = @_;
+	my ($self, $image_db) = @_;
 
 	return Data::Commons::Vote::Image->new(
-		'height' => $image->height,
-		'id' => $image->image_id,
-		'image' => $self->_decode_utf8($image->image),
-		'uploader' => $self->person_db2obj($image->uploader),
-		'width' => $image->width,
+		'height' => $image_db->height,
+		'id' => $image_db->image_id,
+		'image' => $self->_decode_utf8($image_db->image),
+		'uploader' => $self->person_db2obj($image_db->uploader),
+		'width' => $image_db->width,
 	);
 }
 
 sub section_db2obj {
-	my ($self, $section, $images_ar) = @_;
+	my ($self, $section_db, $images_ar) = @_;
 
 	$images_ar ||= [];
 
 	return Data::Commons::Vote::Section->new(
-		'id' => $section->section_id,
+		'id' => $section_db->section_id,
 		'images' => $images_ar,
-		'logo' => $self->_decode_utf8($section->logo),
-		'name' => $self->_decode_utf8($section->name),
-		'number_of_votes' => $section->number_of_votes,
+		'logo' => $self->_decode_utf8($section_db->logo),
+		'name' => $self->_decode_utf8($section_db->name),
+		'number_of_votes' => $section_db->number_of_votes,
 	);
 }
 
 sub person_db2obj {
-	my ($self, $person) = @_;
+	my ($self, $person_db) = @_;
 
 	return Data::Commons::Vote::Person->new(
-		'first_upload_at' => $person->first_upload_at,
-		'id' => $person->person_id,
-		'name' => $self->_decode_utf8($person->name),
-		'wm_username' => $self->_decode_utf8($person->wm_username),
+		'first_upload_at' => $person_db->first_upload_at,
+		'id' => $person_db->person_id,
+		'name' => $self->_decode_utf8($person_db->name),
+		'wm_username' => $self->_decode_utf8($person_db->wm_username),
 	);
 }
 
