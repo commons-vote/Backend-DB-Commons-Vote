@@ -44,10 +44,7 @@ sub fetch_competition {
 		'competition_id' => $competition_id,
 	})->single;
 
-	if (! defined $comp) {
-		return;
-	}
-
+	return unless defined $comp;
 	return $self->{'_transform'}->competition_db2obj($comp,
 		[$self->fetch_competition_sections($competition_id)]);
 }
@@ -84,10 +81,7 @@ sub fetch_hash_type {
 		'hash_type_id' => $hash_type_id,
 	})->single;
 
-	if (! defined $hash_type) {
-		return;
-	}
-
+	return unless defined $hash_type;
 	return $self->{'_transform'}->hash_type_db2obj($hash_type);
 }
 
@@ -98,10 +92,7 @@ sub fetch_hash_type_name {
 		'name' => $hash_type_name,
 	})->single;
 
-	if (! defined $hash_type) {
-		return;
-	}
-
+	return unless defined $hash_type;
 	return $self->{'_transform'}->hash_type_db2obj($hash_type);
 }
 
@@ -134,10 +125,7 @@ sub fetch_section {
 		'section_id' => $section_id,
 	})->single;
 
-	if (! defined $section) {
-		return;
-	}
-
+	return unless defined $section;
 	return $self->{'_transform'}->section_db2obj($section,
 		[$self->fetch_section_images($section_id)]);
 }
@@ -209,7 +197,8 @@ sub save_competition {
 	my $comp = $self->{'schema'}->resultset('Competition')
 		->create($competition_hr);
 
-	return defined $comp ? $self->{'_transform'}->competition_db2obj($comp) : undef;
+	return unless defined $comp;
+	return $self->{'_transform'}->competition_db2obj($comp);
 }
 
 sub save_hash_type {
@@ -230,9 +219,8 @@ sub save_hash_type {
 			'Error', $EVAL_ERROR;
 	}
 
-	return defined $hash_type_db
-		? $self->{'_transform'}->hash_type_db2obj($hash_type_db)
-		: undef;
+	return unless defined $hash_type_db;
+	return $self->{'_transform'}->hash_type_db2obj($hash_type_db);
 }
 
 sub save_image {
@@ -241,7 +229,8 @@ sub save_image {
 	my $image = $self->{'schema'}->resultset('Image')
 		->create($image_hr);
 
-	return defined $image ? $self->{'_transform'}->image_db2obj($image) : undef;
+	return unless defined $image;
+	return $self->{'_transform'}->image_db2obj($image);
 }
 
 sub save_section {
@@ -250,7 +239,8 @@ sub save_section {
 	my $section = $self->{'schema'}->resultset('Section')
 		->create($section_hr);
 
-	return defined $section ? $self->{'_transform'}->section_db2obj($section) : undef;
+	return unless defined $section;
+	return $self->{'_transform'}->section_db2obj($section);
 }
 
 sub save_section_category {
@@ -278,7 +268,8 @@ sub save_person {
 
 	my $person = $self->{'schema'}->resultset('Person')->create($person_hr);
 
-	return defined $person ? $self->{'_transform'}->person_db2obj($person) : undef;
+	return unless defined $person;
+	return $self->{'_transform'}->person_db2obj($person);
 }
 
 1;
