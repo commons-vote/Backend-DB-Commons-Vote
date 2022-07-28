@@ -153,16 +153,11 @@ sub fetch_section_images {
 }
 
 sub fetch_person {
-	my ($self, $person_id) = @_;
+	my ($self, $cond_hr) = @_;
 
-	my $person = $self->{'schema'}->resultset('Person')->search({
-		'person_id' => $person_id,
-	})->single;
+	my $person = $self->{'schema'}->resultset('Person')->search($cond_hr)->single;
 
-	if (! defined $person) {
-		return;
-	}
-
+	return unless defined $person;
 	return $self->{'_transform'}->person_db2obj($person);
 }
 
