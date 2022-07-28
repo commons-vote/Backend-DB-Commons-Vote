@@ -77,23 +77,23 @@ sub fetch_competition_sections {
 sub fetch_hash_type {
 	my ($self, $hash_type_id) = @_;
 
-	my $hash_type = $self->{'schema'}->resultset('HashType')->search({
+	my $hash_type_db = $self->{'schema'}->resultset('HashType')->search({
 		'hash_type_id' => $hash_type_id,
 	})->single;
 
-	return unless defined $hash_type;
-	return $self->{'_transform'}->hash_type_db2obj($hash_type);
+	return unless defined $hash_type_db;
+	return $self->{'_transform'}->hash_type_db2obj($hash_type_db);
 }
 
 sub fetch_hash_type_name {
 	my ($self, $hash_type_name) = @_;
 
-	my $hash_type = $self->{'schema'}->resultset('HashType')->search({
+	my $hash_type_db = $self->{'schema'}->resultset('HashType')->search({
 		'name' => $hash_type_name,
 	})->single;
 
-	return unless defined $hash_type;
-	return $self->{'_transform'}->hash_type_db2obj($hash_type);
+	return unless defined $hash_type_db;
+	return $self->{'_transform'}->hash_type_db2obj($hash_type_db);
 }
 
 sub fetch_image {
@@ -118,12 +118,12 @@ sub fetch_images {
 sub fetch_section {
 	my ($self, $section_id) = @_;
 
-	my $section = $self->{'schema'}->resultset('Section')->search({
+	my $section_db = $self->{'schema'}->resultset('Section')->search({
 		'section_id' => $section_id,
 	})->single;
 
-	return unless defined $section;
-	return $self->{'_transform'}->section_db2obj($section,
+	return unless defined $section_db;
+	return $self->{'_transform'}->section_db2obj($section_db,
 		[$self->fetch_section_images($section_id)]);
 }
 
@@ -152,10 +152,10 @@ sub fetch_section_images {
 sub fetch_person {
 	my ($self, $cond_hr) = @_;
 
-	my $person = $self->{'schema'}->resultset('Person')->search($cond_hr)->single;
+	my $person_db = $self->{'schema'}->resultset('Person')->search($cond_hr)->single;
 
-	return unless defined $person;
-	return $self->{'_transform'}->person_db2obj($person);
+	return unless defined $person_db;
+	return $self->{'_transform'}->person_db2obj($person_db);
 }
 
 sub fetch_person_login {
