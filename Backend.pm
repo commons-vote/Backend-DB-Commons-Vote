@@ -263,6 +263,14 @@ sub save_section_image {
 	return defined $section_image ? $section_image : undef
 }
 
+sub fetch_sections {
+	my ($self, $cond_hr, $attr_hr) = @_;
+
+	return map {
+		$self->{'_transform'}->section_db2obj($_);
+	} $self->{'schema'}->resultset('Section')->search($cond_hr, $attr_hr);
+}
+
 sub save_person {
 	my ($self, $person_hr) = @_;
 
