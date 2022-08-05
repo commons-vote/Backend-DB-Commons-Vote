@@ -37,11 +37,14 @@ sub competition_db2obj {
 		'dt_from' => $comp_db->date_from,
 		'dt_to' => $comp_db->date_to,
 		'id' => $comp_db->competition_id,
+		'jury_max_marking_number' => $comp_db->jury_max_marking_number,
+		'jury_voting' => $comp_db->jury_voting,
 		'logo' => $self->_decode_utf8($comp_db->logo),
 		'name' => $self->_decode_utf8($comp_db->name),
 		'number_of_votes' => $comp_db->number_of_votes,
 		'organizer' => $self->_decode_utf8($comp_db->organizer),
 		'organizer_logo' => $self->_decode_utf8($comp_db->organizer_logo),
+		'public_voting' => $comp_db->public_voting,
 		'sections' => $sections_ar,
 	);
 }
