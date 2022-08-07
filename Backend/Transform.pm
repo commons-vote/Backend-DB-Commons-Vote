@@ -160,13 +160,11 @@ sub person_login_obj2db {
 }
 
 sub section_db2obj {
-	my ($self, $section_db, $images_ar) = @_;
-
-	$images_ar ||= [];
+	my ($self, $section_db) = @_;
 
 	return Data::Commons::Vote::Section->new(
 		'id' => $section_db->section_id,
-		'images' => $images_ar,
+		'images' => [map { $self->image_db2obj($_->image); } $section_db->section_images],
 		'logo' => $self->_decode_utf8($section_db->logo),
 		'name' => $self->_decode_utf8($section_db->name),
 		'number_of_votes' => $section_db->number_of_votes,

@@ -123,8 +123,7 @@ sub fetch_section {
 	})->single;
 
 	return unless defined $section_db;
-	return $self->{'_transform'}->section_db2obj($section_db,
-		[$self->fetch_section_images($section_id)]);
+	return $self->{'_transform'}->section_db2obj($section_db);
 }
 
 sub fetch_section_categories {
