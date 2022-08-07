@@ -49,6 +49,24 @@ sub competition_db2obj {
 	);
 }
 
+sub competition_obj2db {
+	my ($self, $comp_obj) = @_;
+
+	return {
+		'competition_id' => $comp_obj->id,
+		'name' => $comp_obj->name,
+		'date_from' => $comp_obj->dt_from,
+		'date_to' => $comp_obj->dt_to,
+		'logo' => $comp_obj->logo,
+		'organizer' => $comp_obj->organizer,
+		'organizer_logo' => $comp_obj->organizer_logo,
+		'public_voting' => $comp_obj->public_voting,
+		'number_of_votes' => $comp_obj->number_of_votes,
+		'jury_voting' => $comp_obj->jury_voting,
+		'jury_max_marking_number' => $comp_obj->jury_max_marking_number,
+	};
+}
+
 sub hash_type_db2obj {
 	my ($self, $hash_type_db) = @_;
 
@@ -57,6 +75,16 @@ sub hash_type_db2obj {
 		'id' => $hash_type_db->hash_type_id,
 		'name' => $hash_type_db->name,
 	);
+}
+
+sub hash_type_obj2db {
+	my ($self, $hash_type_obj) = @_;
+
+	return {
+		'hash_type_id' => $hash_type_obj->id,
+		'name' => $hash_type_obj->name,
+		'active' => $hash_type_obj->active,
+	};
 }
 
 sub image_db2obj {
@@ -71,6 +99,21 @@ sub image_db2obj {
 	);
 }
 
+sub image_obj2db {
+	my ($self, $image_obj) = @_;
+
+	return {
+		'image_id' => $image_obj->id,
+		'image' => $image_obj->image,
+		'uploader_id' => $image_obj->uploader->id,
+		'author' => $image_obj->author,
+		'comment' => $image_obj->comment,
+		'image_created' => $image_obj->dt_created,
+		'width' => $image_obj->width,
+		'height' => $image_obj->height,
+	};
+}
+
 sub person_db2obj {
 	my ($self, $person_db) = @_;
 
@@ -82,6 +125,18 @@ sub person_db2obj {
 	);
 }
 
+sub person_obj2db {
+	my ($self, $person_obj) = @_;
+
+	return {
+		'person_id' => $person_obj->id,
+		'email' => $person_obj->email,
+		'name' => $person_obj->name,
+		'wm_username' => $person_obj->wm_username,
+		'first_upload_at' => $person_obj->first_upload_at,
+	};
+}
+
 sub person_login_db2obj {
 	my ($self, $person_login_db) = @_;
 
@@ -91,6 +146,17 @@ sub person_login_db2obj {
 		'password' => $person_login_db->password,
 		'hash_type' => $self->hash_type_db2obj($person_login_db->hash_type_id),
 	);
+}
+
+sub person_login_obj2db {
+	my ($self, $person_login_obj) = @_;
+
+	return {
+		'person_id' => $person_login_obj->person->id,
+		'login' => $person_login_obj->login,
+		'password' => $person_login_obj->password,
+		'hash_type_id' => $person_login_obj->hash_type->id,
+	};
 }
 
 sub section_db2obj {
@@ -105,6 +171,18 @@ sub section_db2obj {
 		'name' => $self->_decode_utf8($section_db->name),
 		'number_of_votes' => $section_db->number_of_votes,
 	);
+}
+
+sub section_obj2db {
+	my ($self, $section_obj) = @_;
+
+	return {
+		'section_id' => $section_obj->id,
+		'competition_id' => $section_obj->competition->id,
+		'name' => $section_obj->name,
+		'logo' => $section_obj->logo,
+		'number_of_votes' => $section_obj->number_of_votes,
+	};
 }
 
 sub _decode_utf8 {
