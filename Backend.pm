@@ -177,28 +177,36 @@ sub fetch_people {
 	} $self->{'schema'}->resultset('Person')->search($cond_hr, $attr_hr);
 }
 
+sub fetch_sections {
+	my ($self, $cond_hr, $attr_hr) = @_;
+
+	return map {
+		$self->{'_transform'}->section_db2obj($_);
+	} $self->{'schema'}->resultset('Section')->search($cond_hr, $attr_hr);
+}
+
 sub save_competition {
-	my ($self, $competition_hr) = @_;
+	my ($self, $competition_obj) = @_;
 
-	my $comp = $self->{'schema'}->resultset('Competition')
-		->create($competition_hr);
+	my $comp_db = $self->{'schema'}->resultset('Competition')->create(
+		$self->{'_transform'}->competition_obj2db($competition_obj),
+	);
 
-	return unless defined $comp;
-	return $self->{'_transform'}->competition_db2obj($comp);
+	return unless defined $comp_db;
+	return $self->{'_transform'}->competition_db2obj($comp_db);
 }
 
 sub save_hash_type {
-	my ($self, $hash_type) = @_;
+	my ($self, $hash_type_obj) = @_;
 
-	if (! $hash_type->isa('Data::Commons::Vote::HashType')) {
+	if (! $hash_type_obj->isa('Data::Commons::Vote::HashType')) {
 		err "Hash type object must be a 'Data::Commons::Vote::HashType' instance.";
 	}
 
 	my $hash_type_db = eval {
-		$self->{'schema'}->resultset('HashType')->create({
-			'active' => $hash_type->active,
-			'name' => $hash_type->name,
-		});
+		$self->{'schema'}->resultset('HashType')->create(
+			$self->{'_transform'}->hash_type_obj2db($hash_type_obj),
+		);
 	};
 	if ($EVAL_ERROR) {
 		err "Cannot save hash type.",
@@ -210,61 +218,59 @@ sub save_hash_type {
 }
 
 sub save_image {
-	my ($self, $image_hr) = @_;
+	my ($self, $image_obj) = @_;
 
-	my $image = $self->{'schema'}->resultset('Image')
-		->create($image_hr);
+	my $image_db = $self->{'schema'}->resultset('Image')->create(
+		$self->{'_transform'}->image_obj2db($image_obj),
+	);
 
-	return unless defined $image;
-	return $self->{'_transform'}->image_db2obj($image);
-}
-
-sub save_section {
-	my ($self, $section_hr) = @_;
-
-	my $section = $self->{'schema'}->resultset('Section')
-		->create($section_hr);
-
-	return unless defined $section;
-	return $self->{'_transform'}->section_db2obj($section);
-}
-
-sub save_section_category {
-	my ($self, $section_category_hr) = @_;
-
-	my $section_category = $self->{'schema'}->resultset('SectionCategory')
-		->create($section_category_hr);
-
-	# TODO Co mam vracet?
-	return defined $section_category ? $section_category : undef;
-}
-
-sub save_section_image {
-	my ($self, $section_image_hr) = @_;
-
-	my $section_image = $self->{'schema'}->resultset('SectionImage')
-		->create($section_image_hr);
-
-	# TODO Co vracet?
-	return defined $section_image ? $section_image : undef
-}
-
-sub fetch_sections {
-	my ($self, $cond_hr, $attr_hr) = @_;
-
-	return map {
-		$self->{'_transform'}->section_db2obj($_);
-	} $self->{'schema'}->resultset('Section')->search($cond_hr, $attr_hr);
+	return unless defined $image_db;
+	return $self->{'_transform'}->image_db2obj($image_db);
 }
 
 sub save_person {
-	my ($self, $person_hr) = @_;
+	my ($self, $person_obj) = @_;
 
-	my $person = $self->{'schema'}->resultset('Person')->create($person_hr);
+	my $person_db = $self->{'schema'}->resultset('Person')->create(
+		$self->{'_transform'}->person_obj2db($person_obj),
+	);
 
-	return unless defined $person;
-	return $self->{'_transform'}->person_db2obj($person);
+	return unless defined $person_db;
+	return $self->{'_transform'}->person_db2obj($person_db);
 }
+
+sub save_section {
+	my ($self, $section_obj) = @_;
+
+	my $section_db = $self->{'schema'}->resultset('Section')->create(
+		$self->{'_transform'}->section_obj2db($section_obj),
+	);
+
+	return unless defined $section_db;
+	return $self->{'_transform'}->section_db2obj($section_db);
+}
+
+sub save_section_category {
+	my ($self, $section_category_obj) = @_;
+
+	my $section_category_db = $self->{'schema'}->resultset('SectionCategory')->create(
+		$self->{'_transform'}->section_category_obj2db($section_category_obj),
+	);
+
+	return unless defined $section_category_db;
+	return $self->{'_transform'}->section_category_db2obj($section_category_db);
+}
+
+#sub save_section_image {
+#	my ($self, $section_image_obj) = @_;
+#
+#	my $section_image_db = $self->{'schema'}->resultset('SectionImage')->create(
+#		$self->{'_transform'}->section_image_obj2db($section_image_obj),
+#	);
+#
+#	return unless defined $section_image_db;
+#	return $self->{'_transform'}->section_image_db2obj($section_image_db);
+#}
 
 1;
 
