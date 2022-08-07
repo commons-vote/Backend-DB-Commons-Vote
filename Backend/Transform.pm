@@ -71,20 +71,6 @@ sub image_db2obj {
 	);
 }
 
-sub section_db2obj {
-	my ($self, $section_db, $images_ar) = @_;
-
-	$images_ar ||= [];
-
-	return Data::Commons::Vote::Section->new(
-		'id' => $section_db->section_id,
-		'images' => $images_ar,
-		'logo' => $self->_decode_utf8($section_db->logo),
-		'name' => $self->_decode_utf8($section_db->name),
-		'number_of_votes' => $section_db->number_of_votes,
-	);
-}
-
 sub person_db2obj {
 	my ($self, $person_db) = @_;
 
@@ -104,6 +90,20 @@ sub person_login_db2obj {
 		'login' => $person_login_db->login,
 		'password' => $person_login_db->password,
 		'hash_type' => $self->hash_type_db2obj($person_login_db->hash_type_id),
+	);
+}
+
+sub section_db2obj {
+	my ($self, $section_db, $images_ar) = @_;
+
+	$images_ar ||= [];
+
+	return Data::Commons::Vote::Section->new(
+		'id' => $section_db->section_id,
+		'images' => $images_ar,
+		'logo' => $self->_decode_utf8($section_db->logo),
+		'name' => $self->_decode_utf8($section_db->name),
+		'number_of_votes' => $section_db->number_of_votes,
 	);
 }
 
