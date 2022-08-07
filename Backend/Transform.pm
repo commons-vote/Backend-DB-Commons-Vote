@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Class::Utils qw(set_params);
+use Data::Commons::Vote::Category;
 use Data::Commons::Vote::Competition;
 use Data::Commons::Vote::HashType;
 use Data::Commons::Vote::Image;
@@ -163,6 +164,7 @@ sub section_db2obj {
 	my ($self, $section_db) = @_;
 
 	return Data::Commons::Vote::Section->new(
+		'categories' => [map { $self->section_category_db2obj($_); } $section_db->section_categories],
 		'id' => $section_db->section_id,
 		'images' => [map { $self->image_db2obj($_->image); } $section_db->section_images],
 		'logo' => $self->_decode_utf8($section_db->logo),
