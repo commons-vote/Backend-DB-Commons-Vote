@@ -187,7 +187,6 @@ sub section_category_db2obj {
 	my ($self, $section_category_db) = @_;
 
 	return Data::Commons::Vote::SectionCategory->new(
-		'section' => $self->section_db2obj($section_category_db->section),
 		'category' => $section_category_db->category,
 	);
 }
@@ -196,7 +195,6 @@ sub section_category_obj2db {
 	my ($self, $section_category_obj) = @_;
 
 	return {
-		'section_id' => $section_category_obj->section->id,
 		'category' => $section_category_obj->category,
 	};
 }
