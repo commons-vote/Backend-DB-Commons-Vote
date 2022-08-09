@@ -260,16 +260,16 @@ sub save_section_category {
 	return $self->{'_transform'}->section_category_db2obj($section_category_db);
 }
 
-#sub save_section_image {
-#	my ($self, $section_image_obj) = @_;
-#
-#	my $section_image_db = $self->{'schema'}->resultset('SectionImage')->create(
-#		$self->{'_transform'}->section_image_obj2db($section_image_obj),
-#	);
-#
-#	return unless defined $section_image_db;
-#	return $self->{'_transform'}->section_image_db2obj($section_image_db);
-#}
+sub save_section_image {
+	my ($self, $section_image_obj) = @_;
+
+	my $section_image_db = $self->{'schema'}->resultset('SectionImage')->create(
+		$self->{'_transform'}->section_image_obj2db($section_image_obj),
+	);
+
+	return unless defined $section_image_db;
+	return $self->{'_transform'}->section_image_db2obj($section_image_db);
+}
 
 1;
 
