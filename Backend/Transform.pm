@@ -98,6 +98,7 @@ sub image_db2obj {
 	return Data::Commons::Vote::Image->new(
 		'created_by' => $self->person_db2obj($image_db->created_by),
 		'dt_created' => $image_db->{'image_created'},
+		'dt_uploaded' => $image_db->{'image_uploaded'},
 		'height' => $image_db->height,
 		'id' => $image_db->image_id,
 		'image' => $self->_decode_utf8($image_db->image),
@@ -118,6 +119,7 @@ sub image_obj2db {
 		$self->_check_value('comment', $image_obj, ['comment']),
 		$self->_check_value('created_by_id', $image_obj, ['created_by', 'id']),
 		$self->_check_value('image_created', $image_obj, ['dt_created']),
+		$self->_check_value('image_uploaded', $image_obj, ['dt_uploaded']),
 		$self->_check_value('width', $image_obj, ['width']),
 		$self->_check_value('height', $image_obj, ['height']),
 		$self->_check_value('size', $image_obj, ['size']),
