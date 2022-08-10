@@ -100,6 +100,7 @@ sub image_db2obj {
 		'height' => $image_db->height,
 		'id' => $image_db->image_id,
 		'image' => $self->_decode_utf8($image_db->image),
+		'size' => $image_db->size,
 		'uploader' => $self->person_db2obj($image_db->uploader),
 		'width' => $image_db->width,
 	);
@@ -118,6 +119,7 @@ sub image_obj2db {
 		$self->_check_value('image_created', $image_obj, ['dt_created']),
 		$self->_check_value('width', $image_obj, ['width']),
 		$self->_check_value('height', $image_obj, ['height']),
+		$self->_check_value('size', $image_obj, ['size']),
 	};
 }
 
