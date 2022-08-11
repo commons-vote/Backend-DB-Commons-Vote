@@ -143,6 +143,16 @@ sub fetch_people {
 	} $self->{'schema'}->resultset('Person')->search($cond_hr, $attr_hr);
 }
 
+sub fetch_role {
+	my ($self, $role_name) = @_;
+
+	my $role_db = $self->{'schema'}->resultset('Role')->search({
+		'name' => $role_name,
+	})->single;
+
+	return unless defined $role_db;
+	return $self->{'_transform'}->role_db2obj($role_db);
+}
 sub fetch_section {
 	my ($self, $section_id) = @_;
 
