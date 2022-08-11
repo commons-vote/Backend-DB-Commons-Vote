@@ -248,6 +248,17 @@ sub save_person {
 	return $self->{'_transform'}->person_db2obj($person_db);
 }
 
+sub save_person_role {
+	my ($self, $person_role_obj) = @_;
+
+	my $person_role_db = $self->{'schema'}->resultset('PersonRole')->create(
+		$self->{'_transform'}->person_role_obj2db($person_role_obj),
+	);
+
+	return unless defined $person_role_db;
+	return $self->{'_transform'}->person_role_db2obj($person_role_db);
+}
+
 sub save_section {
 	my ($self, $section_obj) = @_;
 
