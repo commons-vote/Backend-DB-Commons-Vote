@@ -115,6 +115,34 @@ sub fetch_images {
 	} $self->{'schema'}->resultset('Image')->search($cond_hr, $attr_hr);
 }
 
+sub fetch_person {
+	my ($self, $cond_hr) = @_;
+
+	my $person_db = $self->{'schema'}->resultset('Person')->search($cond_hr)->single;
+
+	return unless defined $person_db;
+	return $self->{'_transform'}->person_db2obj($person_db);
+}
+
+sub fetch_person_login {
+	my ($self, $login) = @_;
+
+	my $person_login = $self->{'schema'}->resultset('PersonLogin')->search({
+		'login' => $login,
+	})->single;
+
+	return unless defined $person_login;
+	return $self->{'_transform'}->person_login_db2obj($person_login);
+}
+
+sub fetch_people {
+	my ($self, $cond_hr, $attr_hr) = @_;
+
+	return map {
+		$self->{'_transform'}->person_db2obj($_);
+	} $self->{'schema'}->resultset('Person')->search($cond_hr, $attr_hr);
+}
+
 sub fetch_section {
 	my ($self, $section_id) = @_;
 
@@ -146,34 +174,6 @@ sub fetch_section_images {
 	return map {
 		$self->fetch_image($_->image_id);
 	} @ret;
-}
-
-sub fetch_person {
-	my ($self, $cond_hr) = @_;
-
-	my $person_db = $self->{'schema'}->resultset('Person')->search($cond_hr)->single;
-
-	return unless defined $person_db;
-	return $self->{'_transform'}->person_db2obj($person_db);
-}
-
-sub fetch_person_login {
-	my ($self, $login) = @_;
-
-	my $person_login = $self->{'schema'}->resultset('PersonLogin')->search({
-		'login' => $login,
-	})->single;
-
-	return unless defined $person_login;
-	return $self->{'_transform'}->person_login_db2obj($person_login);
-}
-
-sub fetch_people {
-	my ($self, $cond_hr, $attr_hr) = @_;
-
-	return map {
-		$self->{'_transform'}->person_db2obj($_);
-	} $self->{'schema'}->resultset('Person')->search($cond_hr, $attr_hr);
 }
 
 sub fetch_sections {
