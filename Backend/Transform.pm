@@ -8,10 +8,12 @@ use Data::Commons::Vote::Category;
 use Data::Commons::Vote::Competition;
 use Data::Commons::Vote::HashType;
 use Data::Commons::Vote::Image;
-use Data::Commons::Vote::Section;
-use Data::Commons::Vote::SectionImage;
 use Data::Commons::Vote::Person;
 use Data::Commons::Vote::PersonLogin;
+use Data::Commons::Vote::PersonRole;
+use Data::Commons::Vote::Role;
+use Data::Commons::Vote::Section;
+use Data::Commons::Vote::SectionImage;
 use Encode qw(is_utf8);
 use Error::Pure qw(err);
 use Scalar::Util qw(blessed);
@@ -168,6 +170,46 @@ sub person_login_obj2db {
 		$self->_check_value('login', $person_login_obj, ['login']),
 		$self->_check_value('password', $person_login_obj, ['password']),
 		$self->_check_value('hash_type_id', $person_login_obj, ['hash_type', 'id']),
+	};
+}
+
+sub person_role_db2obj {
+	my ($self, $person_role_db) = @_;
+
+	return Data::Commons::Vote::PersonRole->new(
+		'competition' => $self->competition_db2obj($person_role_db->competition),
+		'person' => $self->person_db2obj($person_role_db->person),
+		'role' => $self->role_db2obj($person_role_db->role),
+	);
+}
+
+sub person_role_obj2db {
+	my ($self, $person_role_obj) = @_;
+
+	return {
+		$self->_check_value('competition_id', $person_role_obj, ['competition', 'id']),
+		$self->_check_value('person_id', $person_role_obj, ['person', 'id']),
+		$self->_check_value('role_id', $person_role_obj, ['role', 'id']),
+	};
+}
+
+sub role_db2obj {
+	my ($self, $role_db) = @_;
+
+	return Data::Commons::Vote::Role->new(
+		'id' => $role_db->role_id,
+		'name' => $self->_decode_utf8($role_db->name),
+		'description' => $self->_decode_utf8($role_db->description),
+	);
+}
+
+sub role_obj2db {
+	my ($self, $role_obj) = @_;
+
+	return {
+		$self->_check_value('role_id', $role_obj, ['id']),
+		'name' => $role_obj->name,
+		$self->_check_value('description', $role_obj, ['description']),
 	};
 }
 
