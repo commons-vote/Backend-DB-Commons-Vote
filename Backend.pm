@@ -27,8 +27,8 @@ sub new {
 	if (! defined $self->{'schema'}) {
 		err "Parameter 'schema' is required.";
 	}
-	if (! $self->{'schema'}->isa('Schema::Commons::Vote')) {
-		err "Parameter 'schema' must be 'Schema::Commons::Vote' instance.";
+	if (! $self->{'schema'}->isa('Schema::Commons::Vote::0_1_0')) {
+		err "Parameter 'schema' must be 'Schema::Commons::Vote::0_1_0' instance.";
 	}
 
 	# Transform object.
