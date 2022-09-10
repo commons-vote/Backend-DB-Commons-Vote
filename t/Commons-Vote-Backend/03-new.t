@@ -14,7 +14,7 @@ use Test::NoWarnings;
 # Test.
 my $tempdir = tempdir(CLEANUP => 1);
 my $db_file = catfile($tempdir, 'ex1.db');
-my $schema = Schema::Commons::Vote->connect('dbi:SQLite:dbname='.$db_file);
+my $schema = Schema::Commons::Vote->new->schema->connect('dbi:SQLite:dbname='.$db_file);
 isa_ok($schema, 'Schema::Commons::Vote');
 my $obj = Commons::Vote::Backend->new(
 	'schema' => $schema,
