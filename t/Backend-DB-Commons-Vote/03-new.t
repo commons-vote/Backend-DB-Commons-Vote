@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Commons::Vote::Backend;
+use Backend::DB::Commons::Vote;
 use DBD::SQLite;
 use English;
 use Error::Pure::Utils qw(clean);
@@ -16,14 +16,14 @@ my $tempdir = tempdir(CLEANUP => 1);
 my $db_file = catfile($tempdir, 'ex1.db');
 my $schema = Schema::Commons::Vote->new->schema->connect('dbi:SQLite:dbname='.$db_file);
 isa_ok($schema, 'Schema::Commons::Vote::0_1_0');
-my $obj = Commons::Vote::Backend->new(
+my $obj = Backend::DB::Commons::Vote->new(
 	'schema' => $schema,
 );
-isa_ok($obj, 'Commons::Vote::Backend');
+isa_ok($obj, 'Backend::DB::Commons::Vote');
 
 # Test.
 eval {
-	Commons::Vote::Backend->new;
+	Backend::DB::Commons::Vote->new;
 };
 is($EVAL_ERROR, "Parameter 'schema' is required.\n",
 	"Parameter 'schema' is required.");
@@ -31,7 +31,7 @@ clean();
 
 # Test.
 eval {
-	Commons::Vote::Backend->new(
+	Backend::DB::Commons::Vote->new(
 		'schema' => 'foo',
 	);
 };

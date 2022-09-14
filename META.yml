@@ -1,5 +1,5 @@
 ---
-abstract: 'commons.vote DB backend.'
+abstract: 'DB backend for commons.vote application.'
 author:
   - 'Michal Josef Spacek <skim@cpan.org>'
 build_requires:
@@ -22,7 +22,7 @@ license: bsd
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
-name: Commons-Vote-Backend
+name: Backend-DB-Commons-Vote
 no_index:
   directory:
     - inc
@@ -41,8 +41,8 @@ requires:
   Unicode::UTF8: 0
   perl: 5.8.0
 resources:
-  bugtracker: https://github.com/michal-josef-spacek/Commons-Vote-Backend/issues
-  homepage: https://github.com/michal-josef-spacek/Commons-Vote-Backend
+  bugtracker: https://github.com/michal-josef-spacek/Backend-DB-Commons-Vote/issues
+  homepage: https://github.com/michal-josef-spacek/Backend-DB-Commons-Vote
   license: http://opensource.org/licenses/bsd-license.php
-  repository: git://github.com/michal-josef-spacek/Commons-Vote-Backend
+  repository: git://github.com/michal-josef-spacek/Backend-DB-Commons-Vote
 version: '0.01'

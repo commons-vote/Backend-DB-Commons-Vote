@@ -1,10 +1,10 @@
-package Commons::Vote::Backend;
+package Backend::DB::Commons::Vote;
 
 use strict;
 use warnings;
 
+use Backend::DB::Commons::Vote::Transform;
 use Class::Utils qw(set_params);
-use Commons::Vote::Backend::Transform;
 use English;
 use Error::Pure qw(err);
 use Unicode::UTF8 qw(decode_utf8);
@@ -32,7 +32,7 @@ sub new {
 	}
 
 	# Transform object.
-	$self->{'_transform'} = Commons::Vote::Backend::Transform->new;
+	$self->{'_transform'} = Backend::DB::Commons::Vote::Transform->new;
 
 	return $self;
 }

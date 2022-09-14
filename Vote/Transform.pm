@@ -1,4 +1,4 @@
-package Commons::Vote::Backend::Transform;
+package Backend::DB::Commons::Vote::Transform;
 
 use strict;
 use warnings;

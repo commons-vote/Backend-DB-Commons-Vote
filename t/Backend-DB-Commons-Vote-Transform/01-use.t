@@ -7,8 +7,8 @@ use Test::NoWarnings;
 BEGIN {
 
 	# Test.
-	use_ok('Commons::Vote::Backend');
+	use_ok('Backend::DB::Commons::Vote::Transform');
 }
 
 # Test.
-require_ok('Commons::Vote::Backend');
+require_ok('Backend::DB::Commons::Vote::Transform');
