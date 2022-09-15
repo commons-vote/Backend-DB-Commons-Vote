@@ -17,6 +17,7 @@ license 'bsd';
 name 'Backend-DB-Commons-Vote';
 readme_from 'Vote.pm';
 recursive_author_tests('xt');
+requires 'Backend::DB' => 0;
 requires 'Class::Utils' => 0;
 requires 'Data::Commons::Vote::Competition' => 0;
 requires 'Data::Commons::Vote::HashType' => 0;

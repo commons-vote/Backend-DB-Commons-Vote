@@ -29,6 +29,7 @@ no_index:
     - t
     - xt
 requires:
+  Backend::DB: 0
   Class::Utils: 0
   Data::Commons::Vote::Competition: 0
   Data::Commons::Vote::HashType: 0
