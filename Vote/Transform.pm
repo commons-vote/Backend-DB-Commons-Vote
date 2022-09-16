@@ -244,8 +244,8 @@ sub section_category_db2obj {
 	my ($self, $section_category_db) = @_;
 
 	return Data::Commons::Vote::Category->new(
-		'section_id' => $section_category_db->section_id,
 		'category' => $section_category_db->category,
+		'section_id' => $section_category_db->section_id,
 	);
 }
 
@@ -262,8 +262,8 @@ sub section_image_db2obj {
 	my ($self, $section_image_db) = @_;
 
 	return Data::Commons::Vote::SectionImage->new(
-		'section_id' => $section_image_db->section_id,
 		'image' => $self->image_db2obj($section_image_db->image),
+		'section_id' => $section_image_db->section_id,
 	);
 }
 
