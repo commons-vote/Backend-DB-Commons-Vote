@@ -41,6 +41,7 @@ sub competition_db2obj {
 	return Data::Commons::Vote::Competition->new(
 		'created_by' => $self->person_db2obj($comp_db->created_by),
 		'dt_from' => $comp_db->date_from,
+		'dt_images_loaded' => $comp_db->images_loaded_at,
 		'dt_to' => $comp_db->date_to,
 		'id' => $comp_db->competition_id,
 		'jury_max_marking_number' => $comp_db->jury_max_marking_number,
@@ -71,6 +72,7 @@ sub competition_obj2db {
 		$self->_check_value('number_of_votes',  $comp_obj, ['number_of_votes']),
 		$self->_check_value('jury_voting', $comp_obj, ['jury_voting']),
 		$self->_check_value('jury_max_marking_number', $comp_obj, ['jury_max_marking_number']),
+		$self->_check_value('images_loaded_at', $comp_obj, ['dt_images_loaded']),
 	};
 }
 
