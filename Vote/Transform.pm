@@ -132,6 +132,7 @@ sub person_db2obj {
 	my ($self, $person_db) = @_;
 
 	return Data::Commons::Vote::Person->new(
+		'email' => $person_db->email,
 		'first_upload_at' => $person_db->first_upload_at,
 		'id' => $person_db->person_id,
 		'name' => $self->_decode_utf8($person_db->name),
