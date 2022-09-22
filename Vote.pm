@@ -38,6 +38,17 @@ sub new {
 	return $self;
 }
 
+sub delete_competition {
+	my ($self, $competition_id) = @_;
+
+	my $comp = $self->{'schema'}->resultset('Competition')->search({
+		'competition_id' => $competition_id,
+	})->single;
+	$comp->delete;
+
+	return;
+}
+
 sub fetch_competition {
 	my ($self, $competition_id) = @_;
 
