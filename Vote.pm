@@ -304,6 +304,28 @@ sub save_section_image {
 	return $self->{'_transform'}->section_image_db2obj($section_image_db);
 }
 
+sub save_vote {
+	my ($self, $vote_obj) = @_;
+
+	my $vote_db = $self->{'schema'}->resultset('Vote')->create(
+		$self->{'_transform'}->vote_obj2db($vote_obj),
+	);
+
+	return unless defined $vote_db;
+	return $self->{'_transform'}->vote_db2obj($vote_db);
+}
+
+sub save_vote_type {
+	my ($self, $vote_type_obj) = @_;
+
+	my $vote_type_db = $self->{'schema'}->resultset('VoteType')->create(
+		$self->{'_transform'}->vote_type_obj2db($vote_type_obj),
+	);
+
+	return unless defined $vote_type_db;
+	return $self->{'_transform'}->vote_type_db2obj($vote_type_db);
+}
+
 1;
 
 __END__
