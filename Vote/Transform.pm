@@ -108,6 +108,7 @@ sub image_db2obj {
 	my ($self, $image_db) = @_;
 
 	return Data::Commons::Vote::Image->new(
+		'comment' => $self->_decode_utf8($image_db->comment),
 		'created_by' => $self->person_db2obj($image_db->created_by),
 		'dt_created' => $image_db->{'image_created'},
 		'dt_uploaded' => $image_db->{'image_uploaded'},
