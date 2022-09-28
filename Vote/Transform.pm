@@ -234,6 +234,7 @@ sub section_db2obj {
 
 	return Data::Commons::Vote::Section->new(
 		'categories' => [map { $self->section_category_db2obj($_); } $section_db->section_categories],
+		'competition' => $self->competition_db2obj($section_db->competition),
 		'created_by' => $self->person_db2obj($section_db->created_by),
 		'id' => $section_db->section_id,
 		'images' => [map { $self->image_db2obj($_->image); } $section_db->section_images],
