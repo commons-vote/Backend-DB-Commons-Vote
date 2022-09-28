@@ -206,6 +206,16 @@ sub fetch_sections {
 	} $self->{'schema'}->resultset('Section')->search($cond_hr, $attr_hr);
 }
 
+sub fetch_vote_type {
+	my ($self, $cond_hr) = @_;
+
+	my $vote_type_db = $self->{'schema'}->resultset('VoteType')
+		->search($cond_hr)->single;
+
+	return unless defined $vote_type_db;
+	return $self->{'_transform'}->vote_type_db2obj($vote_type_db);
+}
+
 sub save_competition {
 	my ($self, $competition_obj) = @_;
 
