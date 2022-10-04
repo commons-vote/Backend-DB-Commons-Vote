@@ -261,7 +261,7 @@ sub section_category_db2obj {
 	my ($self, $section_category_db) = @_;
 
 	return Data::Commons::Vote::Category->new(
-		'category' => $section_category_db->category,
+		'category' => $self->_decode_utf8($section_category_db->category),
 		'created_by' => $self->person_db2obj($section_category_db->created_by),
 		'section_id' => $section_category_db->section_id,
 	);
