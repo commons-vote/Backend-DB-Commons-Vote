@@ -183,7 +183,7 @@ sub fetch_section_categories {
 		'section_id' => $section_id,
 	});
 
-	return map { decode_utf8($_->category) } @ret;
+	return map { $_->category } @ret;
 }
 
 sub fetch_section_images {
