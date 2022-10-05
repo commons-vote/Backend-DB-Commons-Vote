@@ -306,7 +306,7 @@ sub save_section {
 sub save_section_category {
 	my ($self, $section_category_obj) = @_;
 
-	my $section_category_db = $self->{'schema'}->resultset('SectionCategory')->create(
+	my $section_category_db = $self->{'schema'}->resultset('SectionCategory')->update_or_create(
 		$self->{'_transform'}->section_category_obj2db($section_category_obj),
 	);
 
