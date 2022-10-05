@@ -347,6 +347,16 @@ sub save_vote_type {
 	return $self->{'_transform'}->vote_type_db2obj($vote_type_db);
 }
 
+sub update_competition {
+	my ($self, $competition_obj) = @_;
+
+	$self->{'schema'}->resultset('Competition')->update(
+		$self->{'_transform'}->competition_obj2db($competition_obj),
+	);
+
+	return $competition_obj;
+}
+
 1;
 
 __END__
