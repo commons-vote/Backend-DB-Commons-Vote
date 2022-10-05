@@ -41,23 +41,23 @@ sub new {
 sub delete_competition {
 	my ($self, $competition_id) = @_;
 
-	my $comp = $self->{'schema'}->resultset('Competition')->search({
+	my $comp_db = $self->{'schema'}->resultset('Competition')->search({
 		'competition_id' => $competition_id,
 	})->single;
-	$comp->delete;
+	$comp_db->delete;
 
-	return $comp;
+	return $self->{'_transform'}->competition_db2obj($comp_db);
 }
 
 sub delete_section {
 	my ($self, $section_id) = @_;
 
-	my $section = $self->{'schema'}->resultset('Section')->search({
+	my $section_db = $self->{'schema'}->resultset('Section')->search({
 		'section_id' => $section_id,
 	})->single;
-	$section->delete;
+	$section_db->delete;
 
-	return $section;
+	return $self->{'_transform'}->section_db2obj($section_db);
 }
 
 sub fetch_competition {
