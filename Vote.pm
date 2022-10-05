@@ -357,6 +357,16 @@ sub update_competition {
 	return $competition_obj;
 }
 
+sub update_section {
+	my ($self, $section_obj) = @_;
+
+	$self->{'schema'}->resultset('Section')->update(
+		$self->{'_transform'}->section_obj2db($section_obj),
+	);
+
+	return $section_obj;
+}
+
 1;
 
 __END__
