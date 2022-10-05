@@ -262,7 +262,7 @@ sub save_hash_type {
 sub save_image {
 	my ($self, $image_obj) = @_;
 
-	my $image_db = $self->{'schema'}->resultset('Image')->create(
+	my $image_db = $self->{'schema'}->resultset('Image')->update_or_create(
 		$self->{'_transform'}->image_obj2db($image_obj),
 	);
 
@@ -317,7 +317,7 @@ sub save_section_category {
 sub save_section_image {
 	my ($self, $section_image_obj) = @_;
 
-	my $section_image_db = $self->{'schema'}->resultset('SectionImage')->create(
+	my $section_image_db = $self->{'schema'}->resultset('SectionImage')->update_or_create(
 		$self->{'_transform'}->section_image_obj2db($section_image_obj),
 	);
 
