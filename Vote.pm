@@ -49,6 +49,17 @@ sub delete_competition {
 	return;
 }
 
+sub delete_section {
+	my ($self, $section_id) = @_;
+
+	my $section = $self->{'schema'}->resultset('Section')->search({
+		'section_id' => $section_id,
+	})->single;
+	$section->delete;
+
+	return $section;
+}
+
 sub fetch_competition {
 	my ($self, $competition_id) = @_;
 
