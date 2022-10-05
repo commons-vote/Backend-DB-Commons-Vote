@@ -46,7 +46,7 @@ sub delete_competition {
 	})->single;
 	$comp->delete;
 
-	return;
+	return $comp;
 }
 
 sub delete_section {
