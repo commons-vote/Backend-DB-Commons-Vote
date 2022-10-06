@@ -38,6 +38,16 @@ sub new {
 	return $self;
 }
 
+sub count_section_images {
+	my ($self, $section_id) = @_;
+
+	my $count = $self->{'schema'}->resultset('SectionImage')->search({
+		'section_id' => $section_id,
+	})->count;
+
+	return $count;
+}
+
 sub delete_competition {
 	my ($self, $competition_id) = @_;
 
