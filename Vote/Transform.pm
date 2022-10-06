@@ -116,7 +116,7 @@ sub image_db2obj {
 		'dt_uploaded' => $image_db->{'image_uploaded'},
 		'height' => $image_db->height,
 		'id' => $image_db->image_id,
-		'image' => $self->_decode_utf8($image_db->image),
+		'commons_name' => $self->_decode_utf8($image_db->image),
 		'size' => $image_db->size,
 		'uploader' => $self->person_db2obj($image_db->uploader),
 		'width' => $image_db->width,
@@ -128,7 +128,7 @@ sub image_obj2db {
 
 	return {
 		$self->_check_value('image_id', $image_obj, ['id']),
-		'image' => $image_obj->image,
+		'image' => $image_obj->commons_name,
 		'uploader_id' => $image_obj->uploader->id,
 		$self->_check_value('author', $image_obj, ['author']),
 		$self->_check_value('comment', $image_obj, ['comment']),
