@@ -198,11 +198,11 @@ sub fetch_section_categories {
 }
 
 sub fetch_section_images {
-	my ($self, $section_id) = @_;
+	my ($self, $section_id, $attr_hr) = @_;
 
 	my @ret = $self->{'schema'}->resultset('SectionImage')->search({
 		'section_id' => $section_id,
-	});
+	}, $attr_hr);
 
 	return map {
 		$self->fetch_image($_->image_id);
