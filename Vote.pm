@@ -240,6 +240,10 @@ sub fetch_vote_type {
 sub save_competition {
 	my ($self, $competition_obj) = @_;
 
+	if (! $competition_obj->isa('Data::Commons::Vote::Competition')) {
+		err "Competition object must be a 'Data::Commons::Vote::Competition' instance.";
+	}
+
 	my $comp_db = $self->{'schema'}->resultset('Competition')->create(
 		$self->{'_transform'}->competition_obj2db($competition_obj),
 	);
@@ -272,6 +276,10 @@ sub save_hash_type {
 sub save_image {
 	my ($self, $image_obj) = @_;
 
+	if (! $image_obj->isa('Data::Commons::Vote::Image')) {
+		err "Image object must be a 'Data::Commons::Vote::Image' instance.";
+	}
+
 	my $image_db = $self->{'schema'}->resultset('Image')->update_or_create(
 		$self->{'_transform'}->image_obj2db($image_obj),
 	);
@@ -282,6 +290,10 @@ sub save_image {
 
 sub save_person {
 	my ($self, $person_obj) = @_;
+
+	if (! $person_obj->isa('Data::Commons::Vote::Person')) {
+		err "Person object must be a 'Data::Commons::Vote::Person' instance.";
+	}
 
 	my $person_db = $self->{'schema'}->resultset('Person')->create(
 		$self->{'_transform'}->person_obj2db($person_obj),
@@ -294,6 +306,10 @@ sub save_person {
 sub save_person_role {
 	my ($self, $person_role_obj) = @_;
 
+	if (! $person_role_obj->isa('Data::Commons::Vote::PersonRole')) {
+		err "Person role object must be a 'Data::Commons::Vote::PersonRole' instance.";
+	}
+
 	my $person_role_db = $self->{'schema'}->resultset('PersonRole')->create(
 		$self->{'_transform'}->person_role_obj2db($person_role_obj),
 	);
@@ -304,6 +320,10 @@ sub save_person_role {
 
 sub save_section {
 	my ($self, $section_obj) = @_;
+
+	if (! $section_obj->isa('Data::Commons::Vote::Section')) {
+		err "Section object must be a 'Data::Commons::Vote::Section' instance.";
+	}
 
 	my $section_db = $self->{'schema'}->resultset('Section')->create(
 		$self->{'_transform'}->section_obj2db($section_obj),
@@ -316,6 +336,10 @@ sub save_section {
 sub save_section_category {
 	my ($self, $section_category_obj) = @_;
 
+	if (! $section_category_obj->isa('Data::Commons::Vote::Category')) {
+		err "Section category object must be a 'Data::Commons::Vote::Category' instance.";
+	}
+
 	my $section_category_db = $self->{'schema'}->resultset('SectionCategory')->update_or_create(
 		$self->{'_transform'}->section_category_obj2db($section_category_obj),
 	);
@@ -326,6 +350,10 @@ sub save_section_category {
 
 sub save_section_image {
 	my ($self, $section_image_obj) = @_;
+
+	if (! $section_image_obj->isa('Data::Commons::Vote::SectionImage')) {
+		err "Section image object must be a 'Data::Commons::Vote::SectionImage' instance.";
+	}
 
 	my $section_image_db = $self->{'schema'}->resultset('SectionImage')->update_or_create(
 		$self->{'_transform'}->section_image_obj2db($section_image_obj),
@@ -338,6 +366,10 @@ sub save_section_image {
 sub save_vote {
 	my ($self, $vote_obj) = @_;
 
+	if (! $vote_obj->isa('Data::Commons::Vote::Vote')) {
+		err "Vote object must be a 'Data::Commons::Vote::Vote' instance.";
+	}
+
 	my $vote_db = $self->{'schema'}->resultset('Vote')->create(
 		$self->{'_transform'}->vote_obj2db($vote_obj),
 	);
@@ -348,6 +380,10 @@ sub save_vote {
 
 sub save_vote_type {
 	my ($self, $vote_type_obj) = @_;
+
+	if (! $vote_type_obj->isa('Data::Commons::Vote::VoteType')) {
+		err "Vote type object must be a 'Data::Commons::Vote::VoteType' instance.";
+	}
 
 	my $vote_type_db = $self->{'schema'}->resultset('VoteType')->create(
 		$self->{'_transform'}->vote_type_obj2db($vote_type_obj),
