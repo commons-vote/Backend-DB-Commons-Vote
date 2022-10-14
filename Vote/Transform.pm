@@ -8,6 +8,8 @@ use Data::Commons::Vote::Category;
 use Data::Commons::Vote::Competition;
 use Data::Commons::Vote::HashType;
 use Data::Commons::Vote::Image;
+use Data::Commons::Vote::Log;
+use Data::Commons::Vote::LogType;
 use Data::Commons::Vote::Person;
 use Data::Commons::Vote::PersonLogin;
 use Data::Commons::Vote::PersonRole;
@@ -138,6 +140,52 @@ sub image_obj2db {
 		$self->_check_value('width', $image_obj, ['width']),
 		$self->_check_value('height', $image_obj, ['height']),
 		$self->_check_value('size', $image_obj, ['size']),
+	};
+}
+
+sub log_db2obj {
+	my ($self, $log_db) = @_;
+
+	return Data::Commons::Vote::Log->new(
+		'competition' => $self->competition_db2obj($log_db->competition),
+		'created_by' => $self->person_db2obj($log_db->created_by),
+		'id' => $log_db->log_id,
+		'log' => $self->_decode_utf8($log_db->log),
+		'log_type' => $self->log_type_db2obj($log_db->log_type),
+	);
+}
+
+sub log_obj2db {
+	my ($self, $log_obj) = @_;
+
+	return {
+		$self->_check_value('log_id', $log_obj, ['id']),
+		$self->_check_value('log_type_id', $log_obj, ['log_type', 'id']),
+		$self->_check_value('competition_id', $log_obj, ['competition', 'id']),
+		$self->_check_value('log', $log_obj, ['log']),
+		$self->_check_value('created_by_id', $log_obj, ['created_by', 'id']),
+	};
+}
+
+sub log_type_db2obj {
+	my ($self, $log_type_db) = @_;
+
+	return Data::Commons::Vote::LogType->new(
+		'created_by' => $self->person_db2obj($log_type_db->created_by),
+		'description' => $self->_decode_utf8($log_type_db->description),
+		'id' => $log_type_db->log_type_id,
+		'type' => $log_type_db->type,
+	);
+}
+
+sub log_type_obj2db {
+	my ($self, $log_type_obj) = @_;
+
+	return {
+		'log_type_id' => $log_type_obj->id,
+		'type' => $log_type_obj->type,
+		$self->_check_value('description', $log_type_obj, ['description']),
+		$self->_check_value('created_by_id', $log_type_obj, ['created_by', 'id']),
 	};
 }
 

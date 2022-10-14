@@ -148,6 +148,15 @@ sub fetch_images {
 	} $self->{'schema'}->resultset('Image')->search($cond_hr, $attr_hr);
 }
 
+sub fetch_log_type_name {
+	my ($self, $log_type_name) = @_;
+
+	my $log_type_db = $self->{'schema'}->resultset('LogType')->search({'type' => $log_type_name})->single;
+
+	return unless $log_type_db;
+	return $self->{'_transform'}->log_type_db2obj($log_type_db);
+}
+
 sub fetch_person {
 	my ($self, $cond_hr) = @_;
 
@@ -286,6 +295,36 @@ sub save_image {
 
 	return unless defined $image_db;
 	return $self->{'_transform'}->image_db2obj($image_db);
+}
+
+sub save_log {
+	my ($self, $log_obj) = @_;
+
+	if (! $log_obj->isa('Data::Commons::Vote::Log')) {
+		err "Log object must be a 'Data::Commons::Vote::Log' instance.";
+	}
+
+	my $log_db = $self->{'schema'}->resultset('Log')->create(
+		$self->{'_transform'}->log_obj2db($log_obj),
+	);
+
+	return unless defined $log_db;
+	return $self->{'_transform'}->log_db2obj($log_db);
+}
+
+sub save_log_type {
+	my ($self, $log_type_obj) = @_;
+
+	if (! $log_type_obj->isa('Data::Commons::Vote::LogType')) {
+		err "Log type object must be a 'Data::Commons::Vote::LogType' instance.";
+	}
+
+	my $log_type_db = $self->{'schema'}->resultset('LogType')->create(
+		$self->{'_transform'}->log_obj2db($log_type_obj),
+	);
+
+	return unless defined $log_type_db;
+	return $self->{'_transform'}->log_type_db2obj($log_type_db);
 }
 
 sub save_person {
