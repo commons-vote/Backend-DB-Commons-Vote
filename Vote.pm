@@ -70,6 +70,20 @@ sub delete_section {
 	return $self->{'_transform'}->section_db2obj($section_db);
 }
 
+sub delete_section_images {
+	my ($self, $section_id) = @_;
+
+	my @section_images = $self->{'schema'}->resultset('SectionImage')->search({
+		'section_id' => $section_id,
+	});
+
+	foreach my $section_image (@section_images) {
+		$section_image->delete;
+	}
+
+	return scalar @section_images;
+}
+
 sub fetch_competition {
 	my ($self, $competition_id) = @_;
 
