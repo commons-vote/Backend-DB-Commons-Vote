@@ -148,6 +148,25 @@ sub fetch_images {
 	} $self->{'schema'}->resultset('Image')->search($cond_hr, $attr_hr);
 }
 
+sub fetch_log {
+	my ($self, $log_id) = @_;
+
+	my $log_db = $self->{'schema'}->resultset('Log')->search({
+		'log_id' => $log_id,
+	})->single;
+
+	return unless defined $log_db;
+	return $self->{'_transform'}->log_db2obj($log_db);
+}
+
+sub fetch_logs {
+	my ($self, $cond_hr, $attr_hr) = @_;
+
+	return map {
+		$self->{'_transform'}->log_db2obj($_);
+	} $self->{'schema'}->resultset('Log')->search($cond_hr, $attr_hr);
+}
+
 sub fetch_log_type_name {
 	my ($self, $log_type_name) = @_;
 
