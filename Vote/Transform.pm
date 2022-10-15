@@ -148,6 +148,7 @@ sub log_db2obj {
 
 	return Data::Commons::Vote::Log->new(
 		'competition' => $self->competition_db2obj($log_db->competition),
+		'created_at' => $log_db->created_at,
 		'created_by' => $self->person_db2obj($log_db->created_by),
 		'id' => $log_db->log_id,
 		'log' => $self->_decode_utf8($log_db->log),
