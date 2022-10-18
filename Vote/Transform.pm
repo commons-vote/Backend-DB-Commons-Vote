@@ -375,6 +375,49 @@ sub section_image_obj2db {
 	};
 }
 
+sub theme_db2obj {
+	my ($self, $theme_db) = @_;
+
+	return Data::Commons::Vote::Theme->new(
+		'created_by' => $self->person_db2obj($theme_db->created_by),
+		'id' => $theme_db->theme_id,
+		'images' => [map { $self->image_db2obj($_->image); } $theme_db->theme_images],
+		'shortcut' => $self->_decode_utf8($theme_db->shortcut),
+		'name' => $self->_decode_utf8($theme_db->name),
+	);
+}
+
+sub theme_obj2db {
+	my ($self, $theme_obj) = @_;
+
+	return {
+		$self->_check_value('created_by_id', $theme_obj, ['created_by', 'id']),
+		'name' => $theme_obj->name,
+		$self->_check_value('shortcut', $theme_obj, ['shortcut']),
+		$self->_check_value('theme_id', $theme_obj, ['id']),
+	};
+}
+
+sub theme_image_db2obj {
+	my ($self, $theme_image_db) = @_;
+
+	return Data::Commons::Vote::ThemeImage->new(
+		'created_by' => $self->person_db2obj($theme_image_db->created_by),
+		'image' => $self->image_db2obj($theme_image_db->image),
+		'theme_id' => $theme_image_db->theme_id,
+	);
+}
+
+sub theme_image_obj2db {
+	my ($self, $theme_image_obj) = @_;
+
+	return {
+		'theme_id' => $theme_image_obj->theme_id,
+		'image_id' => $theme_image_obj->image->id,
+		$self->_check_value('created_by_id', $theme_image_obj, ['created_by', 'id']),
+	};
+}
+
 sub vote_db2obj {
 	my ($self, $vote_db) = @_;
 

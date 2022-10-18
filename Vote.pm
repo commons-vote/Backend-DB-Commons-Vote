@@ -461,6 +461,36 @@ sub save_section_image {
 	return $self->{'_transform'}->section_image_db2obj($section_image_db);
 }
 
+sub save_theme {
+	my ($self, $theme_obj) = @_;
+
+	if (! $theme_obj->isa('Data::Commons::Vote::Theme')) {
+		err "Section object must be a 'Data::Commons::Vote::Theme' instance.";
+	}
+
+	my $theme_db = $self->{'schema'}->resultset('Theme')->create(
+		$self->{'_transform'}->theme_obj2db($theme_obj),
+	);
+
+	return unless defined $theme_db;
+	return $self->{'_transform'}->theme_db2obj($theme_db);
+}
+
+sub save_theme_image {
+	my ($self, $theme_image_obj) = @_;
+
+	if (! $theme_image_obj->isa('Data::Commons::Vote::ThemeImage')) {
+		err "Section image object must be a 'Data::Commons::Vote::ThemeImage' instance.";
+	}
+
+	my $theme_image_db = $self->{'schema'}->resultset('ThemeImage')->update_or_create(
+		$self->{'_transform'}->theme_image_obj2db($theme_image_obj),
+	);
+
+	return unless defined $theme_image_db;
+	return $self->{'_transform'}->theme_image_db2obj($theme_image_db);
+}
+
 sub save_vote {
 	my ($self, $vote_obj) = @_;
 
