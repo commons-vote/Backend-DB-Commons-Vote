@@ -145,6 +145,19 @@ sub image_obj2db {
 	};
 }
 
+sub license_db2obj {
+	my ($self, $license_db) = @_;
+
+	return Data::Commons::Vote::License->new(
+		'created_at' => $license_db->created_at,
+		'created_by' => $self->person_db2obj($license_db->created_by),
+		'id' => $license_db->license_id,
+		'qid' => $license_db->qid,
+		'short_name' => $license_db->short_name,
+		'text' => $self->_decode_utf8($license_db->text),
+	);
+}
+
 sub log_db2obj {
 	my ($self, $log_db) = @_;
 

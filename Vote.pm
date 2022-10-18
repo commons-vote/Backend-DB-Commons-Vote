@@ -162,6 +162,17 @@ sub fetch_images {
 	} $self->{'schema'}->resultset('Image')->search($cond_hr, $attr_hr);
 }
 
+sub fetch_license_by_qid {
+	my ($self, $qid) = @_;
+
+	my $license_db = $self->{'schema'}->resultset('License')->search({
+		'qid' => $qid,
+	})->single;
+
+	return unless defined $license_db;
+	return $self->{'_transform'}->license_db2obj($license_db);
+}
+
 sub fetch_log {
 	my ($self, $log_id) = @_;
 
