@@ -61,6 +61,7 @@ sub competition_db2obj {
 		'organizer_logo' => $self->_decode_utf8($comp_db->organizer_logo),
 		'public_voting' => $comp_db->public_voting,
 		'sections' => $sections_ar,
+		'wd_qid' => $comp_db->wd_qid,
 	);
 }
 
@@ -85,6 +86,7 @@ sub competition_obj2db {
 		$self->_check_value('jury_voting_date_to', $comp_obj, ['dt_jury_voting_to']),
 		$self->_check_value('jury_max_marking_number', $comp_obj, ['jury_max_marking_number']),
 		$self->_check_value('images_loaded_at', $comp_obj, ['dt_images_loaded']),
+		$self->_check_value('wd_qid', $comp_obj, ['wd_qid']),
 	};
 }
 
