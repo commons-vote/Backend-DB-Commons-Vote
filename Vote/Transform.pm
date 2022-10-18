@@ -122,7 +122,7 @@ sub image_db2obj {
 		'size' => $image_db->size,
 		'uploader' => $self->person_db2obj($image_db->uploader),
 		'width' => $image_db->width,
-		'license' => $image_db->license,
+		defined $image_db->license_id ? ('license_obj' => $self->license_db2obj($image_db->license)) : (),
 	);
 }
 
@@ -141,7 +141,7 @@ sub image_obj2db {
 		$self->_check_value('width', $image_obj, ['width']),
 		$self->_check_value('height', $image_obj, ['height']),
 		$self->_check_value('size', $image_obj, ['size']),
-		$self->_check_value('license', $image_obj, ['license']),
+		$self->_check_value('license_id', $image_obj, ['license_obj', 'id']),
 	};
 }
 
