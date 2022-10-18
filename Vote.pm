@@ -341,6 +341,21 @@ sub save_image {
 	return $self->{'_transform'}->image_db2obj($image_db);
 }
 
+sub save_license {
+	my ($self, $license_obj) = @_;
+
+	if (! $license_obj->isa('Data::Commons::Vote::License')) {
+		err "Log object must be a 'Data::Commons::Vote::License' instance.";
+	}
+
+	my $license_db = $self->{'schema'}->resultset('License')->create(
+		$self->{'_transform'}->license_obj2db($license_obj),
+	);
+
+	return unless defined $license_db;
+	return $self->{'_transform'}->license_db2obj($license_db);
+}
+
 sub save_log {
 	my ($self, $log_obj) = @_;
 

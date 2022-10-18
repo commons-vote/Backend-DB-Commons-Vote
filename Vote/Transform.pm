@@ -158,6 +158,18 @@ sub license_db2obj {
 	);
 }
 
+sub license_obj2db {
+	my ($self, $license_obj) = @_;
+
+	return {
+		$self->_check_value('license_id', $license_obj, ['id']),
+		$self->_check_value('qid', $license_obj, ['qid']),
+		$self->_check_value('short_name', $license_obj, ['short_name']),
+		$self->_check_value('text', $license_obj, ['text']),
+		$self->_check_value('created_by_id', $license_obj, ['created_by', 'id']),
+	};
+}
+
 sub log_db2obj {
 	my ($self, $log_db) = @_;
 
