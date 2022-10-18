@@ -239,6 +239,7 @@ sub fetch_role {
 	return unless defined $role_db;
 	return $self->{'_transform'}->role_db2obj($role_db);
 }
+
 sub fetch_section {
 	my ($self, $section_id) = @_;
 
