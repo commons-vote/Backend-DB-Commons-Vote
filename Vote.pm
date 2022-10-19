@@ -281,6 +281,28 @@ sub fetch_sections {
 	} $self->{'schema'}->resultset('Section')->search($cond_hr, $attr_hr);
 }
 
+sub fetch_theme {
+	my ($self, $theme_id) = @_;
+
+	my $theme_db = $self->{'schema'}->resultset('Theme')->search({
+		'theme_id' => $theme_id,
+	})->single;
+
+	return unless defined $theme_db;
+	return $self->{'_transform'}->theme_db2obj($theme_db);
+}
+
+sub fetch_theme_by_shortcut {
+	my ($self, $theme_shortcut) = @_;
+
+	my $theme_db = $self->{'schema'}->resultset('Theme')->search({
+		'shortcut' => $theme_shortcut,
+	})->single;
+
+	return unless defined $theme_db;
+	return $self->{'_transform'}->theme_db2obj($theme_db);
+}
+
 sub fetch_vote_type {
 	my ($self, $cond_hr) = @_;
 
