@@ -120,6 +120,7 @@ sub image_db2obj {
 		$uploader = $self->person_db2obj($image_db->uploader);
 	}
 	return Data::Commons::Vote::Image->new(
+		'author' => $self->_decode_utf8($image_db->author),
 		'comment' => $self->_decode_utf8($image_db->comment),
 		'created_by' => $self->person_db2obj($image_db->created_by),
 		'dt_created' => $image_db->{'image_created'},
