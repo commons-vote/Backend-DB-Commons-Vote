@@ -38,6 +38,12 @@ sub new {
 	return $self;
 }
 
+sub count_competition {
+	my ($self, $cond_hr) = @_;
+
+	return $self->{'schema'}->resultset('Competition')->search($cond_hr)->count;
+}
+
 sub count_section_images {
 	my ($self, $section_id) = @_;
 
