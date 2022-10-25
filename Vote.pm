@@ -309,6 +309,15 @@ sub fetch_theme_by_shortcut {
 	return $self->{'_transform'}->theme_db2obj($theme_db);
 }
 
+sub fetch_validation_type {
+	my ($self, $cond_hr) = @_;
+
+	my $validation_type_db = $self->{'schema'}->resultset('ValidationType')->search($cond_hr)->single;
+
+	return unless defined $validation_type_db;
+	return $self->{'_transform'}->validation_type_db2obj($validation_type_db);
+}
+
 sub fetch_vote_type {
 	my ($self, $cond_hr) = @_;
 

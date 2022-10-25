@@ -18,6 +18,7 @@ use Data::Commons::Vote::Role;
 use Data::Commons::Vote::Section;
 use Data::Commons::Vote::SectionImage;
 use Data::Commons::Vote::Theme;
+use Data::Commons::Vote::ValidationType;
 use Data::Commons::Vote::Vote;
 use Data::Commons::Vote::VoteType;
 use Encode qw(is_utf8);
@@ -423,6 +424,17 @@ sub theme_image_obj2db {
 		'image_id' => $theme_image_obj->image->id,
 		$self->_check_value('created_by_id', $theme_image_obj, ['created_by', 'id']),
 	};
+}
+
+sub validation_type_db2obj {
+	my ($self, $validation_type_db) = @_;
+
+	return Data::Commons::Vote::ValidationType->new(
+		'created_by' => $self->person_db2obj($validation_type_db->created_by),
+		'description' => $self->_decode_utf8($validation_type_db->description),
+		'id' => $validation_type_db->validation_type_id,
+		'type' => $validation_type_db->type,
+	);
 }
 
 sub vote_db2obj {
