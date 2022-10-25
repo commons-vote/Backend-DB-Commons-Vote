@@ -96,6 +96,31 @@ sub competition_obj2db {
 	};
 }
 
+sub competition_validation_db2obj {
+	my ($self, $comp_validation_db, $options_ar) = @_;
+
+	$options_ar ||= [];
+
+	return Data::Commons::Vote::CompetitionValidation->new(
+		'competition' => $self->competition_db2obj($comp_validation_db->competition),
+		'created_by' => $self->person_db2obj($comp_validation_db->created_by),
+		'id' => $comp_validation_db->competition_validation_id,
+		'options' => $options_ar,
+		'validation_type' => $self->validation_type_db2obj($comp_validation_db->validation_type),
+	);
+}
+
+sub competition_validation_obj2db {
+	my ($self, $competition_validation_obj) = @_;
+
+	return {
+		$self->_check_value('competition_id', $competition_validation_obj, ['competition', 'id']),
+		$self->_check_value('competition_validation_id', $competition_validation_obj, ['id']),
+		$self->_check_value('created_by_id', $competition_validation_obj, ['created_by', 'id']),
+		$self->_check_value('validation_type_id', $competition_validation_obj, ['validation_type', 'id']),
+	};
+}
+
 sub hash_type_db2obj {
 	my ($self, $hash_type_db) = @_;
 
