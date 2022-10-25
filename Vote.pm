@@ -99,7 +99,9 @@ sub fetch_competition {
 
 	return unless defined $comp;
 	return $self->{'_transform'}->competition_db2obj($comp,
-		[$self->fetch_competition_sections($competition_id)]);
+		[$self->fetch_competition_sections($competition_id)],
+		[$self->fetch_competition_validations($competition_id)]
+	);
 }
 
 sub fetch_competitions {
