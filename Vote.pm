@@ -403,6 +403,29 @@ sub fetch_validation_type_options {
 	} @validation_type_options_db;
 }
 
+sub fetch_validation_types {
+	my ($self, $cond_hr, $attr_hr) = @_;
+
+	return map {
+		$self->{'_transform'}->validation_type_db2obj($_);
+	} $self->{'schema'}->resultset('ValidationType')->search($cond_hr, $attr_hr);
+}
+
+sub fetch_validation_types_not_used {
+	my ($self, $competition_id) = @_;
+
+	return map {
+		$self->{'_transform'}->validation_type_db2obj($_);
+	} $self->{'schema'}->resultset('ValidationType')->search({
+		'validation_type_id' => {
+			-not_in => \[
+				'SELECT validation_type_id FROM competition_validation WHERE competition_id = ?',
+				$competition_id,
+			],
+		},
+	});
+}
+
 sub fetch_vote_type {
 	my ($self, $cond_hr) = @_;
 
