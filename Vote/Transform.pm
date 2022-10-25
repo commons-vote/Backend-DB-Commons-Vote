@@ -121,6 +121,30 @@ sub competition_validation_obj2db {
 	};
 }
 
+sub competition_validation_option_db2obj {
+	my ($self, $comp_validation_option_db) = @_;
+
+	return Data::Commons::Vote::CompetitionValidationOption->new(
+		'competition_validation' => $self->competition_validation_db2obj($comp_validation_option_db->competition_validation),
+		'created_by' => $self->person_db2obj($comp_validation_option_db->created_by),
+		'id' => $comp_validation_option_db->competition_validation_option_id,
+		'validation_option' => $self->validation_option_db2obj($comp_validation_option_db->validation_option),
+		'value' => $comp_validation_option_db->value,
+	);
+}
+
+sub competition_validation_option_obj2db {
+	my ($self, $competition_validation_option_obj) = @_;
+
+	return {
+		$self->_check_value('competition_validation_option_id', $competition_validation_option_obj, ['id']),
+		$self->_check_value('competition_validation_id', $competition_validation_option_obj, ['competition_validation', 'id']),
+		$self->_check_value('created_by_id', $competition_validation_option_obj, ['created_by', 'id']),
+		$self->_check_value('validation_option_id', $competition_validation_option_obj, ['validation_option', 'id']),
+		'value' => $competition_validation_option_obj->value,
+	};
+}
+
 sub hash_type_db2obj {
 	my ($self, $hash_type_db) = @_;
 
