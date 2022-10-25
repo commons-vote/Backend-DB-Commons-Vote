@@ -318,6 +318,19 @@ sub fetch_validation_type {
 	return $self->{'_transform'}->validation_type_db2obj($validation_type_db);
 }
 
+sub fetch_validation_type_options {
+	my ($self, $validation_type_id) = @_;
+
+	my @validation_type_options_db
+		= $self->{'schema'}->resultset('ValidationOption')->search({
+		'validation_type_id' => $validation_type_id,
+	});
+
+	map {
+		$self->{'_transform'}->validation_option_db2obj($_);
+	} @validation_type_options_db;
+}
+
 sub fetch_vote_type {
 	my ($self, $cond_hr) = @_;
 
