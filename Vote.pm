@@ -65,6 +65,31 @@ sub delete_competition {
 	return $self->{'_transform'}->competition_db2obj($comp_db);
 }
 
+sub delete_competition_validation {
+	my ($self, $competition_validation_id) = @_;
+
+	my $competition_validation_db = $self->{'schema'}->resultset('CompetitionValidation')->search({
+		'competition_validation_id' => $competition_validation_id,
+	})->single;
+	$competition_validation_db->delete;
+
+	return $self->{'_transform'}->competition_validation_db2obj($competition_validation_db);
+}
+
+sub delete_competition_validation_options {
+	my ($self, $competition_validation_id) = @_;
+
+	my @competition_validation_options = $self->{'schema'}->resultset('CompetitionValidationOption')->search({
+		'competition_validation_id' => $competition_validation_id,
+	});
+
+	foreach my $competition_validation_option (@competition_validation_options) {
+		$competition_validation_option->delete;
+	}
+
+	return scalar @competition_validation_options;
+}
+
 sub delete_section {
 	my ($self, $section_id) = @_;
 
@@ -102,6 +127,51 @@ sub fetch_competition {
 		[$self->fetch_competition_sections($competition_id)],
 		[$self->fetch_competition_validations($competition_id)]
 	);
+}
+
+sub fetch_competition_validation {
+	my ($self, $competition_validation_id) = @_;
+
+	my $comp_validation_db = $self->{'schema'}->resultset('CompetitionValidation')->search({
+		'competition_validation_id' => $competition_validation_id,
+	})->single;
+
+	return unless defined $comp_validation_db;
+	return $self->{'_transform'}->competition_validation_db2obj($comp_validation_db,
+		 [$self->fetch_competition_validation_options($competition_validation_id)]);
+}
+
+sub fetch_competition_validations {
+	my ($self, $competition_id) = @_;
+
+	if (! $competition_id) {
+		return ();
+	}
+
+	my @comp_validations_db = $self->{'schema'}->resultset('CompetitionValidation')->search({
+		'competition_id' => $competition_id,
+	});
+
+	return map {
+		$self->{'_transform'}->competition_validation_db2obj($_,
+			[$self->fetch_competition_validation_options($_->competition_validation_id)]);
+	} @comp_validations_db;
+}
+
+sub fetch_competition_validation_options {
+	my ($self, $competition_validation_id) = @_;
+
+	if (! $competition_validation_id) {
+		return ();
+	}
+
+	my @ret = $self->{'schema'}->resultset('CompetitionValidationOption')->search({
+		'competition_validation_id' => $competition_validation_id,
+	});
+
+	return map {
+		$self->{'_transform'}->competition_validation_option_db2obj($_);
+	} @ret;
 }
 
 sub fetch_competitions {
@@ -356,6 +426,37 @@ sub save_competition {
 
 	return unless defined $comp_db;
 	return $self->{'_transform'}->competition_db2obj($comp_db);
+}
+
+sub save_competition_validation {
+	my ($self, $competition_validation_obj) = @_;
+
+	if (! $competition_validation_obj->isa('Data::Commons::Vote::CompetitionValidation')) {
+		err "CompetitionValidation object must be a 'Data::Commons::Vote::CompetitionValidation' instance.";
+	}
+
+	my $comp_validation_db = $self->{'schema'}->resultset('CompetitionValidation')->create(
+		$self->{'_transform'}->competition_validation_obj2db($competition_validation_obj),
+	);
+
+	return unless defined $comp_validation_db;
+	return $self->{'_transform'}->competition_validation_db2obj($comp_validation_db);
+}
+
+sub save_competition_validation_option {
+	my ($self, $competition_validation_option_obj) = @_;
+
+	if (! $competition_validation_option_obj->isa('Data::Commons::Vote::CompetitionValidationOption')) {
+		err "CompetitionValidationOption object must be a ".
+			"'Data::Commons::Vote::CompetitionValidationOption' instance.";
+	}
+
+	my $comp_validation_option_db = $self->{'schema'}->resultset('CompetitionValidationOption')->create(
+		$self->{'_transform'}->competition_validation_option_obj2db($competition_validation_option_obj),
+	);
+
+	return unless defined $comp_validation_option_db;
+	return $self->{'_transform'}->competition_validation_option_db2obj($comp_validation_option_db);
 }
 
 sub save_hash_type {
