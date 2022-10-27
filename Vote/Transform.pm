@@ -6,6 +6,8 @@ use warnings;
 use Class::Utils qw(set_params);
 use Data::Commons::Vote::Category;
 use Data::Commons::Vote::Competition;
+use Data::Commons::Vote::CompetitionValidation;
+use Data::Commons::Vote::CompetitionValidationOption;
 use Data::Commons::Vote::HashType;
 use Data::Commons::Vote::Image;
 use Data::Commons::Vote::License;
