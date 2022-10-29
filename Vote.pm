@@ -44,6 +44,16 @@ sub count_competition {
 	return $self->{'schema'}->resultset('Competition')->search($cond_hr)->count;
 }
 
+sub count_competition_sections {
+	my ($self, $competition_id) = @_;
+
+	my $count = $self->{'schema'}->resultset('Section')->search({
+		'competition_id' => $competition_id,
+	})->count;
+
+	return $count;
+}
+
 sub count_section_images {
 	my ($self, $section_id) = @_;
 
