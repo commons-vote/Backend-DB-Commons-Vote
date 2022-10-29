@@ -156,6 +156,22 @@ sub fetch_competition {
 	);
 }
 
+sub fetch_competition_person_roles {
+	my ($self, $competition_id) = @_;
+
+	if (! $competition_id) {
+		return ();
+	}
+
+	my @comp_person_roles_db = $self->{'schema'}->resultset('PersonRole')->search({
+		'competition_id' => $competition_id,
+	});
+
+	return map {
+		$self->{'_transform'}->person_role_db2obj($_);
+	} @comp_person_roles_db;
+}
+
 sub fetch_competition_validation {
 	my ($self, $competition_validation_id) = @_;
 
