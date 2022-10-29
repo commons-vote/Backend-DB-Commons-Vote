@@ -342,6 +342,15 @@ sub fetch_person_login {
 	return $self->{'_transform'}->person_login_db2obj($person_login);
 }
 
+sub fetch_person_role {
+	my ($self, $cond_hr) = @_;
+
+	my $person_role_db = $self->{'schema'}->resultset('PersonRole')->search($cond_hr)->single;
+
+	return unless defined $person_role_db;
+	return $self->{'_transform'}->person_role_db2obj($person_role_db);
+}
+
 sub fetch_people {
 	my ($self, $cond_hr, $attr_hr) = @_;
 
