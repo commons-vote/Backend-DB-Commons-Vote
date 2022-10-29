@@ -708,6 +708,16 @@ sub update_competition {
 	return $competition_obj;
 }
 
+sub update_person {
+	my ($self, $person_obj) = @_;
+
+	$self->{'schema'}->resultset('Person')->update(
+		$self->{'_transform'}->person_obj2db($person_obj),
+	);
+
+	return $person_obj;
+}
+
 sub update_section {
 	my ($self, $section_obj) = @_;
 
