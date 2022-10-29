@@ -64,6 +64,12 @@ sub count_section_images {
 	return $count;
 }
 
+sub count_person_role {
+	my ($self, $cond_hr) = @_;
+
+	return $self->{'schema'}->resultset('PersonRole')->search($cond_hr)->count;
+}
+
 sub delete_competition {
 	my ($self, $competition_id) = @_;
 
