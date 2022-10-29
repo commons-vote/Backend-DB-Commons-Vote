@@ -106,6 +106,17 @@ sub delete_competition_validation_options {
 	return scalar @competition_validation_options;
 }
 
+sub delete_person_role {
+	my ($self, $person_role_id) = @_;
+
+	my $person_role_db = $self->{'schema'}->resultset('PersonRole')->search({
+		'person_role_id' => $person_role_id,
+	})->single;
+	$person_role_db->delete;
+
+	return $self->{'_transform'}->person_role_db2obj($person_role_db);
+}
+
 sub delete_section {
 	my ($self, $section_id) = @_;
 
