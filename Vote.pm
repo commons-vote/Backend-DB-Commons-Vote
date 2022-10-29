@@ -719,9 +719,13 @@ sub update_competition {
 }
 
 sub update_person {
-	my ($self, $person_obj) = @_;
+	my ($self, $person_id, $person_obj) = @_;
 
-	$self->{'schema'}->resultset('Person')->update(
+	my $person_db = $self->{'schema'}->resultset('Person')->search({
+		'person_id' => $person_id,
+	})->single;
+
+	$person_db->update(
 		$self->{'_transform'}->person_obj2db($person_obj),
 	);
 
