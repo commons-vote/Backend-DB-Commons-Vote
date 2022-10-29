@@ -44,10 +44,11 @@ sub new {
 }
 
 sub competition_db2obj {
-	my ($self, $comp_db, $sections_ar, $validations_ar) = @_;
+	my ($self, $comp_db, $sections_ar, $validations_ar, $person_roles_ar) = @_;
 
 	$sections_ar ||= [];
 	$validations_ar ||= [];
+	$person_roles_ar ||= [];
 
 	return Data::Commons::Vote::Competition->new(
 		'created_by' => $self->person_db2obj($comp_db->created_by),
@@ -66,6 +67,7 @@ sub competition_db2obj {
 		'number_of_votes' => $comp_db->number_of_votes,
 		'organizer' => $self->_decode_utf8($comp_db->organizer),
 		'organizer_logo' => $self->_decode_utf8($comp_db->organizer_logo),
+		'person_roles' => $person_roles_ar,
 		'public_voting' => $comp_db->public_voting,
 		'sections' => $sections_ar,
 		'validations' => $validations_ar,
