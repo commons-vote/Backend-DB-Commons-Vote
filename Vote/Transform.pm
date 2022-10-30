@@ -335,7 +335,7 @@ sub person_role_db2obj {
 	return Data::Commons::Vote::PersonRole->new(
 		'competition' => $self->competition_db2obj($person_role_db->competition),
 		'created_by' => $self->person_db2obj($person_role_db->created_by),
-		'id' => $person_role_db->id,
+		'id' => $person_role_db->person_role_id,
 		'person' => $self->person_db2obj($person_role_db->person),
 		'role' => $self->role_db2obj($person_role_db->role),
 	);
@@ -347,7 +347,7 @@ sub person_role_obj2db {
 	return {
 		$self->_check_value('competition_id', $person_role_obj, ['competition', 'id']),
 		$self->_check_value('created_by_id', $person_role_obj, ['created_by', 'id']),
-		$self->_check_value('id', $person_role_obj, ['id']),
+		$self->_check_value('person_role_id', $person_role_obj, ['id']),
 		$self->_check_value('person_id', $person_role_obj, ['person', 'id']),
 		$self->_check_value('role_id', $person_role_obj, ['role', 'id']),
 	};
