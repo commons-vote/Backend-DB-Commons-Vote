@@ -369,6 +369,14 @@ sub fetch_role {
 	return $self->{'_transform'}->role_db2obj($role_db);
 }
 
+sub fetch_roles {
+	my ($self, $cond_hr, $attr_hr) = @_;
+
+	return map {
+		$self->{'_transform'}->role_db2obj($_);
+	} $self->{'schema'}->resultset('Role')->search($cond_hr, $attr_hr);
+}
+
 sub fetch_section {
 	my ($self, $section_id) = @_;
 
