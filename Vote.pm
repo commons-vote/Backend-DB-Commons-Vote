@@ -528,14 +528,14 @@ sub fetch_validation_types_not_used {
 	});
 }
 
-sub fetch_vote_type {
+sub fetch_voting_type {
 	my ($self, $cond_hr) = @_;
 
-	my $vote_type_db = $self->{'schema'}->resultset('VoteType')
+	my $voting_type_db = $self->{'schema'}->resultset('VotingType')
 		->search($cond_hr)->single;
 
-	return unless defined $vote_type_db;
-	return $self->{'_transform'}->vote_type_db2obj($vote_type_db);
+	return unless defined $voting_type_db;
+	return $self->{'_transform'}->voting_type_db2obj($voting_type_db);
 }
 
 sub save_competition {

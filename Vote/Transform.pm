@@ -538,7 +538,7 @@ sub vote_db2obj {
 		'competition' => $self->competition_db2obj($vote_db->competition),
 		'image' => $self->image_db2obj($vote_db->image),
 		'person' => $self->person_db2obj($vote_db->person),
-		'vote_type' => $self->vote_type_db2obj($vote_db->vote_type),
+		'voting_type' => $self->voting_type_db2obj($vote_db->voting_type),
 		'vote_value' => $vote_db->vote_value,
 	);
 }
@@ -550,30 +550,30 @@ sub vote_obj2db {
 		$self->_check_value('competition_id', $vote_obj, ['competition', 'id']),
 		$self->_check_value('image_id', $vote_obj, ['image', 'id']),
 		$self->_check_value('person_id', $vote_obj, ['person', 'id']),
-		$self->_check_value('vote_type_id', $vote_obj, ['vote_type', 'id']),
+		$self->_check_value('voting_type_id', $vote_obj, ['voting_type', 'id']),
 		$self->_check_value('vote_value', $vote_obj, ['vote_value']),
 	};
 }
 
-sub vote_type_db2obj {
-	my ($self, $vote_type_db) = @_;
+sub voting_type_db2obj {
+	my ($self, $voting_type_db) = @_;
 
-	return Data::Commons::Vote::VoteType->new(
-		'created_by' => $self->person_db2obj($vote_type_db->created_by),
-		'description' => $self->_decode_utf8($vote_type_db->description),
-		'id' => $vote_type_db->vote_type_id,
-		'type' => $vote_type_db->type,
+	return Data::Commons::Vote::VotingType->new(
+		'created_by' => $self->person_db2obj($voting_type_db->created_by),
+		'description' => $self->_decode_utf8($voting_type_db->description),
+		'id' => $voting_type_db->voting_type_id,
+		'type' => $voting_type_db->type,
 	);
 }
 
-sub vote_type_obj2db {
-	my ($self, $vote_type_obj) = @_;
+sub voting_type_obj2db {
+	my ($self, $voting_type_obj) = @_;
 
 	return {
-		'vote_type_id' => $vote_type_obj->id,
-		'type' => $vote_type_obj->type,
-		$self->_check_value('description', $vote_type_obj, ['description']),
-		$self->_check_value('created_by_id', $vote_type_obj, ['created_by', 'id']),
+		'voting_type_id' => $voting_type_obj->id,
+		'type' => $voting_type_obj->type,
+		$self->_check_value('description', $voting_type_obj, ['description']),
+		$self->_check_value('created_by_id', $voting_type_obj, ['created_by', 'id']),
 	};
 }
 
