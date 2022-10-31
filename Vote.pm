@@ -142,6 +142,14 @@ sub delete_section_images {
 	return scalar @section_images;
 }
 
+sub delete_validation_bads {
+	my ($self, $cond_hr) = @_;
+
+	my @validation_bads = $self->{'schema'}->resultset('ValidationBad')->search($cond_hr)->delete;
+
+	return scalar @validation_bads;
+}
+
 sub fetch_competition {
 	my ($self, $competition_id) = @_;
 
@@ -725,6 +733,21 @@ sub save_theme_image {
 
 	return unless defined $theme_image_db;
 	return $self->{'_transform'}->theme_image_db2obj($theme_image_db);
+}
+
+sub save_validation_bad {
+	my ($self, $validation_bad_obj) = @_;
+
+	if (! $validation_bad_obj->isa('Data::Commons::Vote::ValidationBad')) {
+		err "ValidationBad object must be a 'Data::Commons::Vote::ValidationBad' instance.";
+	}
+
+	my $validation_bad_db = $self->{'schema'}->resultset('ValidationBad')->create(
+		$self->{'_transform'}->validation_bad_obj2db($validation_bad_obj),
+	);
+
+	return unless defined $validation_bad_db;
+	return $self->{'_transform'}->validation_bad_db2obj($validation_bad_db);
 }
 
 sub save_vote {

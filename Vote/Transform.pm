@@ -20,6 +20,7 @@ use Data::Commons::Vote::Role;
 use Data::Commons::Vote::Section;
 use Data::Commons::Vote::SectionImage;
 use Data::Commons::Vote::Theme;
+use Data::Commons::Vote::ValidationBad;
 use Data::Commons::Vote::ValidationOption;
 use Data::Commons::Vote::ValidationType;
 use Data::Commons::Vote::Vote;
@@ -481,6 +482,28 @@ sub theme_image_obj2db {
 		'theme_id' => $theme_image_obj->theme_id,
 		'image_id' => $theme_image_obj->image->id,
 		$self->_check_value('created_by_id', $theme_image_obj, ['created_by', 'id']),
+	};
+}
+
+sub validation_bad_db2obj {
+	my ($self, $validation_bad_db) = @_;
+
+	return Data::Commons::Vote::ValidationBad->new(
+		'created_by' => $self->person_db2obj($validation_bad_db->created_by),
+		'competition' => $self->competition_db2obj($validation_bad_db->competition),
+		'image' => $self->image_db2obj($validation_bad_db->image),
+		'validation_type' => $self->validation_type_db2obj($validation_bad_db->validation_type),
+	);
+}
+
+sub validation_bad_obj2db {
+	my ($self, $validation_bad_obj) = @_;
+
+	return {
+		'competition_id' => $validation_bad_obj->competition->id,
+		'image_id' => $validation_bad_obj->image->id,
+		'validation_type_id' => $validation_bad_obj->validation_type->id,
+		$self->_check_value('created_by_id', $validation_bad_obj, ['created_by', 'id']),
 	};
 }
 
