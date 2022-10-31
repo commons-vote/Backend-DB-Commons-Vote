@@ -70,6 +70,12 @@ sub count_person_role {
 	return $self->{'schema'}->resultset('PersonRole')->search($cond_hr)->count;
 }
 
+sub count_validation_bad {
+	my ($self, $cond_hr) = @_;
+
+	return $self->{'schema'}->resultset('ValidationBad')->search($cond_hr)->count;
+}
+
 sub delete_competition {
 	my ($self, $competition_id) = @_;
 
