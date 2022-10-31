@@ -8,6 +8,7 @@ use Data::Commons::Vote::Category;
 use Data::Commons::Vote::Competition;
 use Data::Commons::Vote::CompetitionValidation;
 use Data::Commons::Vote::CompetitionValidationOption;
+use Data::Commons::Vote::CompetitionVoting;
 use Data::Commons::Vote::HashType;
 use Data::Commons::Vote::Image;
 use Data::Commons::Vote::License;
@@ -24,7 +25,7 @@ use Data::Commons::Vote::ValidationBad;
 use Data::Commons::Vote::ValidationOption;
 use Data::Commons::Vote::ValidationType;
 use Data::Commons::Vote::Vote;
-use Data::Commons::Vote::VoteType;
+use Data::Commons::Vote::VotingType;
 use Encode qw(is_utf8);
 use Error::Pure qw(err);
 use Scalar::Util qw(blessed);
@@ -45,11 +46,12 @@ sub new {
 }
 
 sub competition_db2obj {
-	my ($self, $comp_db, $sections_ar, $validations_ar, $person_roles_ar) = @_;
+	my ($self, $comp_db, $sections_ar, $validations_ar, $person_roles_ar, $voting_types_ar) = @_;
 
 	$sections_ar ||= [];
 	$validations_ar ||= [];
 	$person_roles_ar ||= [];
+	$voting_types_ar ||= [];
 
 	return Data::Commons::Vote::Competition->new(
 		'created_by' => $self->person_db2obj($comp_db->created_by),
@@ -72,6 +74,7 @@ sub competition_db2obj {
 		'public_voting' => $comp_db->public_voting,
 		'sections' => $sections_ar,
 		'validations' => $validations_ar,
+		'voting_types' => $voting_types_ar,
 		'wd_qid' => $comp_db->wd_qid,
 	);
 }
@@ -147,6 +150,34 @@ sub competition_validation_option_obj2db {
 		$self->_check_value('created_by_id', $competition_validation_option_obj, ['created_by', 'id']),
 		$self->_check_value('validation_option_id', $competition_validation_option_obj, ['validation_option', 'id']),
 		'value' => $competition_validation_option_obj->value,
+	};
+}
+
+sub competition_voting_db2obj {
+	my ($self, $competition_voting_db) = @_;
+
+	return Data::Commons::Vote::CompetitionVoting->new(
+		'competition' => $self->competition_db2obj($competition_voting_db->competition),
+		'created_by' => $self->person_db2obj($competition_voting_db->created_by),
+		'dt_from' => $competition_voting_db->date_from,
+		'dt_to' => $competition_voting_db->date_to,
+		'id' => $competition_voting_db->competition_id,
+		'number_of_votes' => $competition_voting_db->number_of_votes,
+		'voting_type' => $self->voting_type_db2obj($competition_voting_db->voting_type),
+	);
+}
+
+sub competition_voting_obj2db {
+	my ($self, $competition_voting_obj) = @_;
+
+	return {
+		$self->_check_value('competition_voting_id', $competition_voting_obj, ['id']),
+		$self->_check_value('competition_id', $competition_voting_obj, ['competition', 'id']),
+		$self->_check_value('voting_type_id', $competition_voting_obj, ['voting_type', 'id']),
+		'date_from' => $competition_voting_obj->dt_from,
+		'date_to' => $competition_voting_obj->dt_to,
+		$self->_check_value('number_of_votes',  $competition_voting_obj, ['number_of_votes']),
+		$self->_check_value('created_by_id', $competition_voting_obj, ['created_by', 'id']),
 	};
 }
 

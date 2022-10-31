@@ -180,6 +180,7 @@ sub fetch_competition {
 		[$self->fetch_competition_sections($competition_id)],
 		[$self->fetch_competition_validations($competition_id)],
 		[$self->fetch_competition_person_roles($competition_id)],
+		[$self->fetch_competition_votings($competition_id)],
 	);
 }
 
@@ -260,6 +261,34 @@ sub fetch_competition_validation_options {
 		$self->{'_transform'}->competition_validation_option_db2obj($_);
 	} @ret;
 }
+
+sub fetch_competition_voting {
+	my ($self, $competition_voting_id) = @_;
+
+	my $competition_voting_db = $self->{'schema'}->resultset('CompetitionVoting')->search({
+		'competition_voting_id' => $competition_voting_id,
+	})->single;
+
+	return unless defined $competition_voting_db;
+	return $self->{'_transform'}->competition_voting_db2obj($competition_voting_db);
+}
+
+sub fetch_competition_votings {
+	my ($self, $competition_id) = @_;
+
+	if (! $competition_id) {
+		return ();
+	}
+
+	my @comp_votings_db = $self->{'schema'}->resultset('CompetitionVoting')->search({
+		'competition_id' => $competition_id,
+	});
+
+	return map {
+		$self->{'_transform'}->competition_voting_db2obj($_);
+	} @comp_votings_db;
+}
+
 
 sub fetch_competitions {
 	my ($self, $cond_hr, $attr_hr) = @_;
@@ -538,6 +567,29 @@ sub fetch_voting_type {
 	return $self->{'_transform'}->voting_type_db2obj($voting_type_db);
 }
 
+sub fetch_voting_types {
+	my ($self, $cond_hr, $attr_hr) = @_;
+
+	return map {
+		$self->{'_transform'}->voting_type_db2obj($_);
+	} $self->{'schema'}->resultset('VotingType')->search($cond_hr, $attr_hr);
+}
+
+sub fetch_voting_types_not_used {
+	my ($self, $competition_id) = @_;
+
+	return map {
+		$self->{'_transform'}->voting_type_db2obj($_);
+	} $self->{'schema'}->resultset('VotingType')->search({
+		'voting_type_id' => {
+			-not_in => \[
+				'SELECT voting_type_id FROM competition_voting WHERE competition_id = ?',
+				$competition_id,
+			],
+		},
+	});
+}
+
 sub save_competition {
 	my ($self, $competition_obj) = @_;
 
@@ -582,6 +634,21 @@ sub save_competition_validation_option {
 
 	return unless defined $comp_validation_option_db;
 	return $self->{'_transform'}->competition_validation_option_db2obj($comp_validation_option_db);
+}
+
+sub save_competition_voting {
+	my ($self, $competition_voting_obj) = @_;
+
+	if (! $competition_voting_obj->isa('Data::Commons::Vote::CompetitionVoting')) {
+		err "CompetitionVoting object must be a 'Data::Commons::Vote::CompetitionVoting' instance.";
+	}
+
+	my $comp_voting_db = $self->{'schema'}->resultset('CompetitionVoting')->create(
+		$self->{'_transform'}->competition_voting_obj2db($competition_voting_obj),
+	);
+
+	return unless defined $comp_voting_db;
+	return $self->{'_transform'}->competition_voting_db2obj($comp_voting_db);
 }
 
 sub save_hash_type {
