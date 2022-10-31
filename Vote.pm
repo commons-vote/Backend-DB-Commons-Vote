@@ -44,6 +44,18 @@ sub count_competition {
 	return $self->{'schema'}->resultset('Competition')->search($cond_hr)->count;
 }
 
+sub count_competition_images {
+	my ($self, $competition_id) = @_;
+
+	my $count = $self->{'schema'}->resultset('SectionImage')->search({
+		'section.competition_id' => $competition_id,
+	}, {
+		'join' => 'section',
+	})->count;
+
+	return $count;
+}
+
 sub count_competition_sections {
 	my ($self, $competition_id) = @_;
 
@@ -169,6 +181,23 @@ sub fetch_competition {
 		[$self->fetch_competition_validations($competition_id)],
 		[$self->fetch_competition_person_roles($competition_id)],
 	);
+}
+
+sub fetch_competition_images {
+	my ($self, $competition_id, $attr_hr) = @_;
+
+	my @ret = $self->{'schema'}->resultset('SectionImage')->search({
+		'section.competition_id' => $competition_id,
+	}, {
+		'columns' => ['image_id'],
+		'distinct' => 1,
+		'join' => 'section',
+		%{$attr_hr},
+	});
+
+	return map {
+		$self->fetch_image($_->image_id);
+	} @ret;
 }
 
 sub fetch_competition_person_roles {
