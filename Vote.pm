@@ -66,6 +66,16 @@ sub count_competition_sections {
 	return $count;
 }
 
+sub count_competition_voting {
+	my ($self, $competition_id) = @_;
+
+	my $dtf = $self->{'schema'}->storage->datetime_parser;
+	return $self->{'schema'}->resultset('CompetitionVoting')->search({
+		'competition_id' => $competition_id,
+		'date_to' => { '>=' => $dtf->format_datetime(DateTime->now) },
+	})->count;
+}
+
 sub count_section_images {
 	my ($self, $section_id) = @_;
 
@@ -122,6 +132,17 @@ sub delete_competition_validation_options {
 	}
 
 	return scalar @competition_validation_options;
+}
+
+sub delete_competition_voting {
+	my ($self, $competition_voting_id) = @_;
+
+	my $competition_voting_db = $self->{'schema'}->resultset('CompetitionVoting')->search({
+		'competition_voting_id' => $competition_voting_id,
+	})->single;
+	$competition_voting_db->delete;
+
+	return $self->{'_transform'}->competition_voting_db2obj($competition_voting_db);
 }
 
 sub delete_person_role {
