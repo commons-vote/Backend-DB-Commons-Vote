@@ -800,21 +800,6 @@ sub save_vote {
 	return $self->{'_transform'}->vote_db2obj($vote_db);
 }
 
-sub save_vote_type {
-	my ($self, $vote_type_obj) = @_;
-
-	if (! $vote_type_obj->isa('Data::Commons::Vote::VoteType')) {
-		err "Vote type object must be a 'Data::Commons::Vote::VoteType' instance.";
-	}
-
-	my $vote_type_db = $self->{'schema'}->resultset('VoteType')->create(
-		$self->{'_transform'}->vote_type_obj2db($vote_type_obj),
-	);
-
-	return unless defined $vote_type_db;
-	return $self->{'_transform'}->vote_type_db2obj($vote_type_db);
-}
-
 sub update_competition {
 	my ($self, $competition_obj) = @_;
 
