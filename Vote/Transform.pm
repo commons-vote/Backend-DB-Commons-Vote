@@ -141,7 +141,7 @@ sub competition_voting_db2obj {
 		'created_by' => $self->person_db2obj($competition_voting_db->created_by),
 		'dt_from' => $competition_voting_db->date_from,
 		'dt_to' => $competition_voting_db->date_to,
-		'id' => $competition_voting_db->competition_id,
+		'id' => $competition_voting_db->competition_voting_id,
 		'number_of_votes' => $competition_voting_db->number_of_votes,
 		'voting_type' => $self->voting_type_db2obj($competition_voting_db->voting_type),
 	);
