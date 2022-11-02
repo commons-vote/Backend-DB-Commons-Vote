@@ -504,6 +504,7 @@ sub validation_bad_db2obj {
 		'competition' => $self->competition_db2obj($validation_bad_db->competition),
 		'image' => $self->image_db2obj($validation_bad_db->image),
 		'validation_type' => $self->validation_type_db2obj($validation_bad_db->validation_type),
+		'section' => $self->section_db2obj($validation_bad_db->section),
 	);
 }
 
@@ -515,6 +516,7 @@ sub validation_bad_obj2db {
 		'image_id' => $validation_bad_obj->image->id,
 		'validation_type_id' => $validation_bad_obj->validation_type->id,
 		$self->_check_value('created_by_id', $validation_bad_obj, ['created_by', 'id']),
+		$self->_check_value('section_id', $validation_bad_obj, ['section', 'id']),
 	};
 }
 
