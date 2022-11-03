@@ -190,18 +190,30 @@ sub delete_validation_bads {
 }
 
 sub fetch_competition {
-	my ($self, $competition_id) = @_;
+	my ($self, $cond_hr, $attr_hr, $opts_hr) = @_;
 
-	my $comp = $self->{'schema'}->resultset('Competition')->search({
-		'competition_id' => $competition_id,
-	})->single;
+	my $competition_db = $self->{'schema'}->resultset('Competition')->search($cond_hr, $attr_hr)->single;
 
-	return unless defined $comp;
-	return $self->{'_transform'}->competition_db2obj($comp,
-		[$self->fetch_competition_sections($competition_id)],
-		[$self->fetch_competition_validations($competition_id)],
-		[$self->fetch_competition_person_roles($competition_id)],
-		[$self->fetch_competition_votings($competition_id)],
+	return unless defined $competition_db;
+	return $self->{'_transform'}->competition_db2obj($competition_db,
+		[$opts_hr->{'sections'}
+			? $self->fetch_competition_sections({
+				'competition_id' => $competition_db->competition_id,
+			}, {}, $opts_hr)
+			: (),
+		],
+		[$opts_hr->{'validations'}
+			? $self->fetch_competition_validations($competition_db->competition_id)
+			: (),
+		],
+		[$opts_hr->{'person_roles'}
+			? $self->fetch_competition_person_roles($competition_db->competition_id)
+			: (),
+		],
+		[$opts_hr->{'votings'}
+			? $self->fetch_competition_votings($competition_db->competition_id)
+			: (),
+		],
 	);
 }
 
@@ -320,19 +332,12 @@ sub fetch_competitions {
 }
 
 sub fetch_competition_sections {
-	my ($self, $competition_id) = @_;
+	my ($self, $cond_hr, $attr_hr, $opts_hr) = @_;
 
-	if (! $competition_id) {
-		return ();
-	}
-
-	my @ret = $self->{'schema'}->resultset('Section')->search({
-		'competition_id' => $competition_id,
-	});
+	my @ret = $self->{'schema'}->resultset('Section')->search($cond_hr, $attr_hr);
 
 	return map {
-		$self->{'_transform'}->section_db2obj($_,
-			[$self->fetch_section_images($_->section_id)]);
+		$self->{'_transform'}->section_db2obj($_, $opts_hr);
 	} @ret;
 }
 
