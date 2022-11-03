@@ -386,14 +386,14 @@ sub role_obj2db {
 }
 
 sub section_db2obj {
-	my ($self, $section_db) = @_;
+	my ($self, $section_db, $opts_hr) = @_;
 
 	return Data::Commons::Vote::Section->new(
 		'categories' => [map { $self->section_category_db2obj($_); } $section_db->section_categories],
 		'competition' => $self->competition_db2obj($section_db->competition),
 		'created_by' => $self->person_db2obj($section_db->created_by),
 		'id' => $section_db->section_id,
-		'images' => [map { $self->image_db2obj($_->image); } $section_db->section_images],
+		$opts_hr->{'section_images'} ? ('images' => [map { $self->image_db2obj($_->image); } $section_db->section_images]) : (),
 		'logo' => $self->_decode_utf8($section_db->logo),
 		'name' => $self->_decode_utf8($section_db->name),
 		'number_of_votes' => $section_db->number_of_votes,
