@@ -56,6 +56,24 @@ sub count_competition_images {
 	return $count;
 }
 
+sub count_competition_images_valid {
+	my ($self, $competition_id) = @_;
+
+	my $count = $self->{'schema'}->resultset('SectionImage')->search({
+		'section.competition_id' => $competition_id,
+		'image_id' => {
+			-not_in => \[
+				'SELECT image_id FROM validation_bad WHERE competition_id = ?',
+				$competition_id,
+			],
+		},
+	}, {
+		'join' => 'section',
+	})->count;
+
+	return $count;
+}
+
 sub count_competition_sections {
 	my ($self, $competition_id) = @_;
 
@@ -244,6 +262,29 @@ sub fetch_competition_images {
 
 	my @ret = $self->{'schema'}->resultset('SectionImage')->search({
 		'section.competition_id' => $competition_id,
+	}, {
+		'columns' => ['image_id'],
+		'distinct' => 1,
+		'join' => 'section',
+		%{$attr_hr},
+	});
+
+	return map {
+		$self->fetch_image($_->image_id);
+	} @ret;
+}
+
+sub fetch_competition_images_valid {
+	my ($self, $competition_id, $attr_hr) = @_;
+
+	my @ret = $self->{'schema'}->resultset('SectionImage')->search({
+		'section.competition_id' => $competition_id,
+		'image_id' => {
+			-not_in => \[
+				'SELECT image_id FROM validation_bad WHERE competition_id = ?',
+				$competition_id,
+			],
+		},
 	}, {
 		'columns' => ['image_id'],
 		'distinct' => 1,
