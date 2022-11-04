@@ -76,6 +76,16 @@ sub count_competition_voting_by_now {
 	})->count;
 }
 
+sub count_image {
+	my ($self, $image_id) = @_;
+
+	my $count = $self->{'schema'}->resultset('Image')->search({
+		'image_id' => $image_id,
+	})->count;
+
+	return $count;
+}
+
 sub count_section_images {
 	my ($self, $section_id) = @_;
 
@@ -96,6 +106,12 @@ sub count_validation_bad {
 	my ($self, $cond_hr) = @_;
 
 	return $self->{'schema'}->resultset('ValidationBad')->search($cond_hr)->count;
+}
+
+sub count_vote {
+	my ($self, $cond_hr) = @_;
+
+	return $self->{'schema'}->resultset('Vote')->search($cond_hr)->count;
 }
 
 sub delete_competition {
@@ -187,6 +203,14 @@ sub delete_validation_bads {
 	my @validation_bads = $self->{'schema'}->resultset('ValidationBad')->search($cond_hr)->delete;
 
 	return scalar @validation_bads;
+}
+
+sub delete_vote {
+	my ($self, $cond_hr) = @_;
+
+	my @votes = $self->{'schema'}->resultset('Vote')->search($cond_hr)->delete;
+
+	return scalar @votes;
 }
 
 sub fetch_competition {
@@ -581,6 +605,16 @@ sub fetch_validation_types_not_used {
 			],
 		},
 	});
+}
+
+sub fetch_vote {
+	my ($self, $cond_hr) = @_;
+
+	my $vote_db = $self->{'schema'}->resultset('Vote')
+		->search($cond_hr)->single;
+
+	return unless defined $vote_db;
+	return $self->{'_transform'}->vote_db2obj($vote_db);
 }
 
 sub fetch_voting_type {
