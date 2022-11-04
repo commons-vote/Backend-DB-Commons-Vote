@@ -928,9 +928,13 @@ sub save_vote {
 }
 
 sub update_competition {
-	my ($self, $competition_obj) = @_;
+	my ($self, $competition_id, $competition_obj) = @_;
 
-	$self->{'schema'}->resultset('Competition')->update(
+	my $competition_db = $self->{'schema'}->resultset('Competition')->search({
+		'competition_id' => $competition_id,
+	})->single;
+
+	$competition_db->update(
 		$self->{'_transform'}->competition_obj2db($competition_obj),
 	);
 
