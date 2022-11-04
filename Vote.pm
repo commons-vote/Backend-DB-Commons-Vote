@@ -162,11 +162,9 @@ sub delete_competition_voting {
 }
 
 sub delete_person_role {
-	my ($self, $person_role_id) = @_;
+	my ($self, $cond_hr) = @_;
 
-	my $person_role_db = $self->{'schema'}->resultset('PersonRole')->search({
-		'person_role_id' => $person_role_id,
-	})->single;
+	my $person_role_db = $self->{'schema'}->resultset('PersonRole')->search($cond_hr)->single;
 	$person_role_db->delete;
 
 	return $self->{'_transform'}->person_role_db2obj($person_role_db);
