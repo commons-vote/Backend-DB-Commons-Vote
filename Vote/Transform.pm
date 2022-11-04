@@ -548,10 +548,9 @@ sub vote_db2obj {
 	my ($self, $vote_db) = @_;
 
 	return Data::Commons::Vote::Vote->new(
-		'competition' => $self->competition_db2obj($vote_db->competition),
+		'competition_voting' => $self->competition_voting_db2obj($vote_db->competition_voting),
 		'image' => $self->image_db2obj($vote_db->image),
-		'person' => $self->person_db2obj($vote_db->person),
-		'voting_type' => $self->voting_type_db2obj($vote_db->voting_type),
+		defined $vote_db->person_id ? ('person' => $self->person_db2obj($vote_db->person)) : (),
 		'vote_value' => $vote_db->vote_value,
 	);
 }
@@ -560,10 +559,9 @@ sub vote_obj2db {
 	my ($self, $vote_obj) = @_;
 
 	return {
-		$self->_check_value('competition_id', $vote_obj, ['competition', 'id']),
+		$self->_check_value('competition_voting_id', $vote_obj, ['competition_voting', 'id']),
 		$self->_check_value('image_id', $vote_obj, ['image', 'id']),
 		$self->_check_value('person_id', $vote_obj, ['person', 'id']),
-		$self->_check_value('voting_type_id', $vote_obj, ['voting_type', 'id']),
 		$self->_check_value('vote_value', $vote_obj, ['vote_value']),
 	};
 }
