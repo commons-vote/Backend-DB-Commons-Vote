@@ -66,12 +66,12 @@ sub count_competition_sections {
 	return $count;
 }
 
-sub count_competition_voting {
-	my ($self, $competition_id) = @_;
+sub count_competition_voting_by_now {
+	my ($self, $cond_hr) = @_;
 
 	my $dtf = $self->{'schema'}->storage->datetime_parser;
 	return $self->{'schema'}->resultset('CompetitionVoting')->search({
-		'competition_id' => $competition_id,
+		%{$cond_hr},
 		'date_to' => { '>=' => $dtf->format_datetime(DateTime->now) },
 	})->count;
 }
