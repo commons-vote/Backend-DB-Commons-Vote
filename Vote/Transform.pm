@@ -25,6 +25,7 @@ use Data::Commons::Vote::ValidationBad;
 use Data::Commons::Vote::ValidationOption;
 use Data::Commons::Vote::ValidationType;
 use Data::Commons::Vote::Vote;
+use Data::Commons::Vote::VoteStats;
 use Data::Commons::Vote::VotingType;
 use Encode qw(is_utf8);
 use Error::Pure qw(err);
@@ -564,6 +565,16 @@ sub vote_obj2db {
 		$self->_check_value('person_id', $vote_obj, ['person', 'id']),
 		$self->_check_value('vote_value', $vote_obj, ['vote_value']),
 	};
+}
+
+sub vote_stats_db2obj {
+	my ($self, $vote_stats_db, $competition_voting_obj, $image_obj) = @_;
+
+	return Data::Commons::Vote::VoteStats->new(
+		'competition_voting' => $competition_voting_obj,
+		'image' => $image_obj,
+		'vote_count' => $vote_stats_db->get_column('count_images'),
+	);
 }
 
 sub voting_type_db2obj {

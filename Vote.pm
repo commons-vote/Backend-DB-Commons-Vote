@@ -84,6 +84,12 @@ sub count_competition_sections {
 	return $count;
 }
 
+sub count_competition_voting {
+	my ($self, $cond_hr) = @_;
+
+	return $self->{'schema'}->resultset('CompetitionVoting')->search($cond_hr)->count;
+}
+
 sub count_competition_voting_by_now {
 	my ($self, $cond_hr) = @_;
 
@@ -654,6 +660,28 @@ sub fetch_vote {
 
 	return unless defined $vote_db;
 	return $self->{'_transform'}->vote_db2obj($vote_db);
+}
+
+sub fetch_vote_counted {
+	my ($self, $competition_voting_id) = @_;
+
+	my @votes_counted_db = $self->{'schema'}->resultset('Vote')->search({
+		'competition_voting_id' => $competition_voting_id,
+	}, {
+		'group_by' => 'image_id',
+		'select' => [
+			'image_id',
+			{'count' => 'image_id', -as => 'count_images'},
+		],
+	});
+
+	return map {
+		$self->{'_transform'}->vote_stats_db2obj(
+			$_,
+			$self->fetch_competition_voting($competition_voting_id),
+			$self->fetch_image($_->image_id),
+		);
+	} @votes_counted_db;
 }
 
 sub fetch_voting_type {
