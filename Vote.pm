@@ -699,8 +699,10 @@ sub fetch_vote_counted {
 	return map {
 		$self->{'_transform'}->vote_stats_db2obj(
 			$_,
-			$self->fetch_competition_voting($competition_voting_id),
-			$self->fetch_image($_->image_id),
+			$self->fetch_competition_voting({
+				'competition_voting_id' => $competition_voting_id,
+			}),
+			$self->fetch_image($_->get_column('image_id')),
 		);
 	} @votes_counted_db;
 }
