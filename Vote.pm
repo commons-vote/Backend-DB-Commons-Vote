@@ -366,11 +366,9 @@ sub fetch_competition_validation_options {
 }
 
 sub fetch_competition_voting {
-	my ($self, $competition_voting_id) = @_;
+	my ($self, $cond_hr, $attr_hr) = @_;
 
-	my $competition_voting_db = $self->{'schema'}->resultset('CompetitionVoting')->search({
-		'competition_voting_id' => $competition_voting_id,
-	})->single;
+	my $competition_voting_db = $self->{'schema'}->resultset('CompetitionVoting')->search($cond_hr, $attr_hr)->single;
 
 	return unless defined $competition_voting_db;
 	return $self->{'_transform'}->competition_voting_db2obj($competition_voting_db);
