@@ -435,6 +435,27 @@ sub fetch_image {
 	return $self->{'_transform'}->image_db2obj($image_db);
 }
 
+sub fetch_image_next {
+	my ($self, $image_id) = @_;
+
+	# TODO Combine this two select to one?
+	my $image_min_db = $self->{'schema'}->resultset('Image')->search({
+		'image_id' => {'>', $image_id},
+	}, {
+		'columns' => [
+			{'next_image_id' => {'min' => 'image_id'}},
+		],
+	})->single;
+	return unless defined $image_min_db;
+
+	my $image_db = $self->{'schema'}->resultset('Image')->search({
+		'image_id' => $image_min_db->get_column('next_image_id'),
+	})->single;
+
+	return unless defined $image_db;
+	return $self->{'_transform'}->image_db2obj($image_db);
+}
+
 sub fetch_images {
 	my ($self, $cond_hr, $attr_hr) = @_;
 
