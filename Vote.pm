@@ -257,8 +257,9 @@ sub fetch_competition {
 			: (),
 		],
 		[$opts_hr->{'votings'}
-			? $self->fetch_competition_votings($competition_db->competition_id)
-			: (),
+			? $self->fetch_competition_votings({
+				'competition_id' => $competition_db->competition_id,
+			}) : (),
 		],
 	);
 }
@@ -376,21 +377,14 @@ sub fetch_competition_voting {
 }
 
 sub fetch_competition_votings {
-	my ($self, $competition_id) = @_;
+	my ($self, $cond_hr, $attr_hr) = @_;
 
-	if (! $competition_id) {
-		return ();
-	}
-
-	my @comp_votings_db = $self->{'schema'}->resultset('CompetitionVoting')->search({
-		'competition_id' => $competition_id,
-	});
+	my @comp_votings_db = $self->{'schema'}->resultset('CompetitionVoting')->search($cond_hr, $attr_hr);
 
 	return map {
 		$self->{'_transform'}->competition_voting_db2obj($_);
 	} @comp_votings_db;
 }
-
 
 sub fetch_competitions {
 	my ($self, $cond_hr, $attr_hr) = @_;
