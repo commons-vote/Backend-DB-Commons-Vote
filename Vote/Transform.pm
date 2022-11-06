@@ -408,8 +408,8 @@ sub section_obj2db {
 		$self->_check_value('competition_id', $section_obj, ['competition', 'id']),
 		$self->_check_value('created_by_id', $section_obj, ['created_by', 'id']),
 		'name' => $section_obj->name,
-		$self->_check_value('logo', $section_obj, ['logo']),
-		$self->_check_value('number_of_votes', $section_obj, ['number_of_votes']),
+		'logo' => $section_obj->logo,
+		'number_of_votes' => $section_obj->number_of_votes,
 		$self->_check_value('section_id', $section_obj, ['id']),
 	};
 }
