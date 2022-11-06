@@ -693,6 +693,7 @@ sub fetch_vote_counted {
 		'select' => [
 			'image_id',
 			{'count' => 'image_id', -as => 'count_images'},
+			{'sum' => 'vote_value::int', -as => 'sum_images'},
 		],
 	});
 

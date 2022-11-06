@@ -574,6 +574,7 @@ sub vote_stats_db2obj {
 		'competition_voting' => $competition_voting_obj,
 		'image' => $image_obj,
 		'vote_count' => $vote_stats_db->get_column('count_images'),
+		'vote_sum' => $vote_stats_db->get_column('sum_images'),
 	);
 }
 
