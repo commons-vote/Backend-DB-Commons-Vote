@@ -693,6 +693,30 @@ sub fetch_vote_counted {
 		'select' => [
 			'image_id',
 			{'count' => 'image_id', -as => 'count_images'},
+		],
+	});
+
+	return map {
+		$self->{'_transform'}->vote_stats_db2obj(
+			$_,
+			$self->fetch_competition_voting({
+				'competition_voting_id' => $competition_voting_id,
+			}),
+			$self->fetch_image($_->get_column('image_id')),
+		);
+	} @votes_counted_db;
+}
+
+sub fetch_vote_counted_sum {
+	my ($self, $competition_voting_id) = @_;
+
+	my @votes_counted_db = $self->{'schema'}->resultset('Vote')->search({
+		'competition_voting_id' => $competition_voting_id,
+	}, {
+		'group_by' => 'image_id',
+		'select' => [
+			'image_id',
+			{'count' => 'image_id', -as => 'count_images'},
 			{'sum' => 'vote_value::int', -as => 'sum_images'},
 		],
 	});
