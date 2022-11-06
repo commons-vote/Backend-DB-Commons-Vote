@@ -570,11 +570,12 @@ sub vote_obj2db {
 sub vote_stats_db2obj {
 	my ($self, $vote_stats_db, $competition_voting_obj, $image_obj) = @_;
 
+	my %columns = $vote_stats_db->get_columns;
 	return Data::Commons::Vote::VoteStats->new(
 		'competition_voting' => $competition_voting_obj,
 		'image' => $image_obj,
 		'vote_count' => $vote_stats_db->get_column('count_images'),
-		'vote_sum' => $vote_stats_db->get_column('sum_images'),
+		exists $columns{'sum_images'} ? ('vote_sum' => $vote_stats_db->get_column('sum_images')) : (),
 	);
 }
 
