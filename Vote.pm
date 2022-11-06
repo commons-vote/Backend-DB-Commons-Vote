@@ -1071,9 +1071,11 @@ sub update_person {
 }
 
 sub update_section {
-	my ($self, $section_obj) = @_;
+	my ($self, $section_id, $section_obj) = @_;
 
-	$self->{'schema'}->resultset('Section')->update(
+	$self->{'schema'}->resultset('Section')->search({
+		'section_id' => $section_id,
+	})->update(
 		$self->{'_transform'}->section_obj2db($section_obj),
 	);
 
