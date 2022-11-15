@@ -230,9 +230,12 @@ sub delete_validation_bads {
 sub delete_vote {
 	my ($self, $cond_hr) = @_;
 
-	my @votes = $self->{'schema'}->resultset('Vote')->search($cond_hr)->delete;
+	my $delete_count = $self->{'schema'}->resultset('Vote')->search($cond_hr)->delete;
+	if ($delete_count eq '0E0') {
+		$delete_count = 0;
+	}
 
-	return scalar @votes;
+	return $delete_count;
 }
 
 sub fetch_competition {
