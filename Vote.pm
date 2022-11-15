@@ -264,6 +264,28 @@ sub fetch_competition {
 	);
 }
 
+sub fetch_competition_image_next {
+	my ($self, $competition_id, $image_id) = @_;
+
+	my $image_min_db = $self->{'schema'}->resultset('SectionImage')->search({
+		'image_id' => {'>', $image_id},
+		'section.competition_id' => $competition_id,
+	}, {
+		'columns' => [
+			{'next_image_id' => {'min' => 'image_id'}},
+		],
+		'join' => 'section',
+	})->single;
+	return unless defined $image_min_db;
+
+	my $image_db = $self->{'schema'}->resultset('Image')->search({
+		'image_id' => $image_min_db->get_column('next_image_id'),
+	})->single;
+
+	return unless defined $image_db;
+	return $self->{'_transform'}->image_db2obj($image_db);
+}
+
 sub fetch_competition_images {
 	my ($self, $competition_id, $attr_hr) = @_;
 
@@ -429,27 +451,6 @@ sub fetch_image {
 
 	my $image_db = $self->{'schema'}->resultset('Image')->search({
 		'image_id' => $image_id,
-	})->single;
-
-	return unless defined $image_db;
-	return $self->{'_transform'}->image_db2obj($image_db);
-}
-
-sub fetch_image_next {
-	my ($self, $image_id) = @_;
-
-	# TODO Combine this two select to one?
-	my $image_min_db = $self->{'schema'}->resultset('Image')->search({
-		'image_id' => {'>', $image_id},
-	}, {
-		'columns' => [
-			{'next_image_id' => {'min' => 'image_id'}},
-		],
-	})->single;
-	return unless defined $image_min_db;
-
-	my $image_db = $self->{'schema'}->resultset('Image')->search({
-		'image_id' => $image_min_db->get_column('next_image_id'),
 	})->single;
 
 	return unless defined $image_db;
