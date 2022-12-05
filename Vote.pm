@@ -290,8 +290,14 @@ sub fetch_competition_image_next {
 	my ($self, $competition_id, $image_id) = @_;
 
 	my $image_min_db = $self->{'schema'}->resultset('SectionImage')->search({
-		'image_id' => {'>', $image_id},
 		'section.competition_id' => $competition_id,
+		'image_id' => {
+			'>' => $image_id,
+			-not_in => \[
+				'SELECT image_id FROM validation_bad WHERE competition_id = ?',
+				$competition_id,
+			],
+		},
 	}, {
 		'columns' => [
 			{'next_image_id' => {'min' => 'image_id'}},
