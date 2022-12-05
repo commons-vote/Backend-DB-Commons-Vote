@@ -56,6 +56,25 @@ sub count_competition_images {
 	return $count;
 }
 
+sub count_competition_image_valid {
+	my ($self, $competition_id, $image_id) = @_;
+
+	my $count = $self->{'schema'}->resultset('SectionImage')->search({
+		'section.competition_id' => $competition_id,
+		'image_id' => {
+			'=' => $image_id,
+			-not_in => \[
+				'SELECT image_id FROM validation_bad WHERE competition_id = ?',
+				$competition_id,
+			],
+		},
+	}, {
+		'join' => 'section',
+	})->count;
+
+	return $count;
+}
+
 sub count_competition_images_valid {
 	my ($self, $competition_id) = @_;
 
