@@ -9,7 +9,6 @@ use Data::Commons::Vote::Competition;
 use Data::Commons::Vote::CompetitionValidation;
 use Data::Commons::Vote::CompetitionValidationOption;
 use Data::Commons::Vote::CompetitionVoting;
-use Data::Commons::Vote::HashType;
 use Data::Commons::Vote::Image;
 use Data::Commons::Vote::License;
 use Data::Commons::Vote::Log;
@@ -27,6 +26,7 @@ use Data::Commons::Vote::ValidationType;
 use Data::Commons::Vote::Vote;
 use Data::Commons::Vote::VoteStats;
 use Data::Commons::Vote::VotingType;
+use Data::HashType;
 use Encode qw(is_utf8);
 use Error::Pure qw(err);
 use Scalar::Util qw(blessed);
@@ -165,7 +165,7 @@ sub competition_voting_obj2db {
 sub hash_type_db2obj {
 	my ($self, $hash_type_db) = @_;
 
-	return Data::Commons::Vote::HashType->new(
+	return Data::HashType->new(
 		'active' => $hash_type_db->active,
 		'id' => $hash_type_db->hash_type_id,
 		'name' => $hash_type_db->name,

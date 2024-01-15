@@ -32,11 +32,11 @@ requires:
   Backend::DB: 0
   Class::Utils: 0
   Data::Commons::Vote::Competition: 0
-  Data::Commons::Vote::HashType: 0
   Data::Commons::Vote::Image: 0
   Data::Commons::Vote::Person: 0
   Data::Commons::Vote::PersonLogin: 0
   Data::Commons::Vote::Section: 0
+  Data::HashType: 0
   Encode: 0
   Error::Pure: 0
   Unicode::UTF8: 0
